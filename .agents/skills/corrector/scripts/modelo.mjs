@@ -3,18 +3,16 @@
 const BASE = process.env.DEVEXPERT_BASE_URL ?? "https://inference.devexpert.io/v1";
 const MODELO = process.env.DEVEXPERT_MODEL ?? "chat";
 const TIEMPO_MAXIMO = 120_000;
-// Tope de tokens de salida (incluido el razonamiento). Con el esfuerzo de razonamiento por defecto, el modelo
-// a veces se queda razonando sin parar (32.000 tokens y casi 4 céntimos sin respuesta). Con "low" responde en
-// unos segundos y, si aun así se pasa del tope, se reintenta.
+// Tope de tokens de salida (incluido el razonamiento). A veces el modelo se queda razonando sin parar:
+// con el tope, esa vuelta cuesta como mucho unos 2 céntimos y se reintenta.
 const MAX_TOKENS = 16_000;
-const ESFUERZO = process.env.DEVEXPERT_REASONING_EFFORT ?? "low";
 
 /**
  * Devuelve { datos, coste } con la respuesta ya convertida desde JSON. Reintenta si no lo es, si le faltan
- * las claves de `claves`, si `valida` la rechaza, si se corta por el tope de tokens, si tarda más de 2 minutos o si falla el servidor.
+ * las claves de `claves`, si se corta por el tope de tokens, si tarda más de 2 minutos o si falla el servidor.
  * El coste suma todos los intentos.
  */
-export async function llamarModelo(sistema, usuario, { claves = [], valida = () => true } = {}) {
+export async function llamarModelo(sistema, usuario, { claves = [] } = {}) {
   const clave = process.env.DEVEXPERT_API_KEY;
   if (!clave) {
     throw new Error("Falta DEVEXPERT_API_KEY. Pon la clave del curso en esa variable de entorno.");
@@ -32,7 +30,6 @@ export async function llamarModelo(sistema, usuario, { claves = [], valida = () 
           model: MODELO,
           temperature: 0,
           max_tokens: MAX_TOKENS,
-          reasoning_effort: ESFUERZO,
           response_format: { type: "json_object" },
           messages: [
             { role: "system", content: sistema },
@@ -59,8 +56,8 @@ export async function llamarModelo(sistema, usuario, { claves = [], valida = () 
     try {
       const datos = JSON.parse(d.choices[0].message.content);
       const faltan = claves.filter((c) => !(datos && typeof datos === "object" && c in datos));
-      if (datos && typeof datos === "object" && faltan.length === 0 && valida(datos)) return { datos, coste };
-      ultimoError = new Error(faltan.length ? `a la respuesta le falta ${faltan.join(", ")}` : "la respuesta no tiene la forma que pide la rúbrica");
+      if (datos && typeof datos === "object" && faltan.length === 0) return { datos, coste };
+      ultimoError = new Error(faltan.length ? `a la respuesta le falta ${faltan.join(", ")}` : "la respuesta no es un objeto");
     } catch (e) {
       ultimoError = e;
     }

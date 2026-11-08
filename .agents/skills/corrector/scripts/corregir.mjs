@@ -3,7 +3,7 @@
 //
 //   node .agents/skills/corrector/scripts/corregir.mjs <ejercicio> [fichero]
 //
-// <ejercicio> es el número del ejercicio. Qué es [fichero] depende de cada ejercicio.
+// <ejercicio> es el número del ejercicio o "final". Qué es [fichero] depende de cada ejercicio.
 //
 // Necesita la clave del curso en DEVEXPERT_API_KEY. Opcionales: DEVEXPERT_BASE_URL y DEVEXPERT_MODEL.
 // Sale con 0 si el veredicto es accept y con 1 si es revise.
@@ -13,11 +13,13 @@ import { llamarModelo } from "./modelo.mjs";
 import { esElPrincipal } from "./plataforma.mjs";
 
 export const EJERCICIOS = {
+  0: "./ejercicios/0.mjs",
   1: "./ejercicios/1.mjs",
   2: "./ejercicios/2.mjs",
   3: "./ejercicios/3.mjs",
   4: "./ejercicios/4.mjs",
   5: "./ejercicios/5.mjs",
+  6: "./ejercicios/6.mjs",
 };
 
 export async function corregir(ejercicio, { raiz = process.cwd(), fichero, modelo = llamarModelo, ...extra } = {}) {
