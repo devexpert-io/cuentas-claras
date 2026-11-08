@@ -36,7 +36,10 @@ export async function revisarValidacion({ id, sesion, evidencia, modelo }) {
     evidencia_de_la_validacion: evidencia.filter((e) => /valida/i.test(e)),
   };
   const sistema = readFileSync(join(SKILL, "rubricas", "ejercicio-7.md"), "utf8").replace(/\r\n/g, "\n");
-  const { datos, coste } = await modelo(sistema, JSON.stringify(entrada, null, 2), { claves: ["cita_evidencia"] });
+  const { datos, coste } = await modelo(sistema, JSON.stringify(entrada, null, 2), {
+    claves: ["cita_evidencia"],
+    valida: (d) => typeof d.cita_evidencia === "boolean",
+  });
   const lineas = [];
   for (const a of datos?.afirmaciones ?? []) lineas.push(`  ${a.tipo === "ejecutada" ? "✓" : "·"} ${a.tipo === "ejecutada" ? "Ejecutado" : "Opinión"}: ${a.texto}`);
   const ok = datos?.cita_evidencia === true;
