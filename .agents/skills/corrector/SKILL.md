@@ -1,6 +1,6 @@
 ---
 name: corrector
-description: Corrige un ejercicio del curso de entrada de DevExpert y da un veredicto accept o revise con lo que falta. Úsala cuando el alumno pida corregir, revisar o "pasar el corrector" a un ejercicio (por ejemplo, "pasa el corrector al ejercicio 5", "corrige mi spec" o "corrige el ejercicio 7").
+description: Corrige un ejercicio del curso de entrada de DevExpert y da un veredicto accept o revise con lo que falta. Úsala cuando el alumno pida corregir, revisar o "pasar el corrector" a un ejercicio (por ejemplo, "pasa el corrector al ejercicio 5", "corrige mi spec" o "corrige mi skill").
 ---
 
 # Corrector del curso
@@ -24,6 +24,7 @@ node .agents/skills/corrector/scripts/corregir.mjs <ejercicio> [fichero]
   - `5` (la spec de tu primera feature). `[fichero]` es la spec. Si no se indica, corrige `docs/specs/<id>.md` de la primera feature de `feature_list.json` que esté lista según sus dependencias y sin aceptar, la misma que elige `feature-spec`. En un proyecto propio sin `feature_list.json`, pasa la ruta de la spec.
   - `6` (implementa la feature). En `cuentas-claras`, sin `[fichero]`: `./init.sh` y unos tests del curso para `anotar-gasto`. En un proyecto propio, `[fichero]` es la spec y se revisa el diff desde el último commit que la tocó.
   - `7` (valida en una sesión nueva). `[fichero]` es el id de la feature; en `cuentas-claras`, si no se indica, `anotar-gasto`. Mira que esté en `accepted` con evidencia, que `PROGRESS.md` tenga la sesión de validación con su veredicto y que la validación cite evidencia ejecutada.
+  - `8` (crea tu propia skill). `[fichero]` es el nombre de la skill o la ruta de su `SKILL.md`; si no se indica, la única skill de `.agents/skills/` que no es del curso. Comprueba el frontmatter y le pasa a un modelo tres peticiones de prueba para ver si la cargaría cuando toca.
 - Necesita la clave del curso en `DEVEXPERT_API_KEY`. Si falta, explícale al alumno cómo ponerla y no sigas.
 - Sale con código 0 si el veredicto es `accept`, con 1 si es `revise` y con 2 si no ha podido corregir.
 - Los ejercicios que ejecutan `./init.sh` o tests tardan un poco. Espera a que termine.
