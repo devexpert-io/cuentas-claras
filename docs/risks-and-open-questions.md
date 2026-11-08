@@ -6,8 +6,6 @@
 
 ## Implementation-Time Questions
 
-- Nombres de grupos y miembros: ¿"Ana" y "ana" son el mismo miembro? ¿Y "Ángel" y "Angel"? Postura inicial: sí, los nombres no distinguen mayúsculas ni tildes. Se decide al implementar la creación de grupos.
-- Dónde y cómo se guarda cada grupo. Postura inicial: un fichero JSON por grupo en la carpeta de datos, con un nombre de fichero que sale del nombre del grupo sin tildes, espacios ni signos. Se decide al implementar la creación de grupos.
 - Cómo se indica en cada orden a qué grupo se refiere. Postura inicial: por su nombre, comparado igual que al crearlo.
 - Formato de los importes al escribirlos en la terminal. Postura inicial: coma o punto decimal y como mucho dos decimales ("12,50" o "12.50"). Se muestran siempre como "12,50 €".
 - Orden alfabético para los céntimos sobrantes cuando hay tildes o mayúsculas. Postura inicial: el orden del español, sin distinguir mayúsculas ni tildes ("Álvaro" va antes que "Bea").
