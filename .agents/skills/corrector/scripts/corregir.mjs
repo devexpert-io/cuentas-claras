@@ -20,6 +20,7 @@ export const EJERCICIOS = {
   4: "./ejercicios/4.mjs",
   5: "./ejercicios/5.mjs",
   6: "./ejercicios/6.mjs",
+  7: "./ejercicios/7.mjs",
 };
 
 export async function corregir(ejercicio, { raiz = process.cwd(), fichero, modelo = llamarModelo, ...extra } = {}) {
