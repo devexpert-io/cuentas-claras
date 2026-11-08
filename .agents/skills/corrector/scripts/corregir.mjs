@@ -15,6 +15,7 @@ import { esElPrincipal } from "./plataforma.mjs";
 export const EJERCICIOS = {
   1: "./ejercicios/1.mjs",
   2: "./ejercicios/2.mjs",
+  3: "./ejercicios/3.mjs",
 };
 
 export async function corregir(ejercicio, { raiz = process.cwd(), fichero, modelo = llamarModelo, ...extra } = {}) {
