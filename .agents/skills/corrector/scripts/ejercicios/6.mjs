@@ -105,7 +105,10 @@ async function corregirPropio({ raiz, ruta, modelo, diff }) {
       ...resumirDiff(cambios),
     };
     const sistema = readFileSync(join(SKILL, "rubricas", "ejercicio-6.md"), "utf8").replace(/\r\n/g, "\n");
-    ({ datos: revision, coste } = await modelo(sistema, JSON.stringify(entrada, null, 2), { claves: ["escenarios"] }));
+    ({ datos: revision, coste } = await modelo(sistema, JSON.stringify(entrada, null, 2), {
+      claves: ["escenarios"],
+      valida: (d) => Array.isArray(d.escenarios) && esc.every((e) => d.escenarios.some((r) => Number(r?.n) === e.n && ["si", "parcial", "no"].includes(r.probado))),
+    }));
     // Sin la lista de escenarios no hay revisión: mejor un error que un veredicto inventado.
     if (!Array.isArray(revision?.escenarios)) throw new Error("El modelo no ha devuelto la revisión de los escenarios. Vuelve a pasar el corrector.");
   }
