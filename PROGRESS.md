@@ -5,7 +5,7 @@
 - Raíz del repositorio: `.` (la carpeta que contiene este archivo)
 - Ruta estándar de arranque: `./init.sh`
 - Ruta estándar de verificación: `./init.sh` (instalación con el lockfile, `pnpm typecheck` y `pnpm test`)
-- `anotar-gasto` está `passing`, pendiente de validar con `feature-validator` en una sesión nueva. `crear-grupo` está `accepted`.
+- `anotar-gasto` está `accepted`. `crear-grupo` está `accepted`.
 - Bloqueo actual: ninguno
 - Última verificación: 2026-11-08, `./init.sh` con código 0 (114 tests)
 
@@ -64,3 +64,12 @@
 - Archivos actualizados: `src/`, `tests/`, `ARCHITECTURE.md`, `docs/domain-model.md`, `docs/risks-and-open-questions.md`, `feature_list.json`, `PROGRESS.md`.
 - Riesgos o puntos abiertos: las partes no se guardan, se recalculan. `ver-saldos` tiene que usar el mismo `repartirIgual`.
 - Siguiente paso: validar `anotar-gasto` con la skill `feature-validator` en una sesión nueva (ejercicio 7).
+
+### Session 006
+
+- Fecha: 2026-11-08
+- Objetivo: validar `anotar-gasto` en una sesión que no escribió el código, con `feature-validator` (ejercicio 7).
+- Veredicto: **accept**. Sin hallazgos críticos, altos ni medios. Dos observaciones menores no bloqueantes: la validación de un fichero editado a mano no comprueba que los nombres de `miembros` tengan letra o número, y el test del escenario 13 depende de que los tests no corran como root.
+- Verificación ejecutada: `./init.sh` con código 0 (114 tests en 7 ficheros). Revisión del diff de `feat: anotar-gasto` contra `docs/specs/anotar-gasto.md`: implementación dentro del alcance, los 14 escenarios cubiertos y la arquitectura respetada. Prueba a mano del flujo completo con `main.ts` y `CUENTAS_DIR` en una carpeta temporal: escenario 1 (mensaje exacto y `importeCentimos: 1000`), segunda anotación con id 2, participantes indicados, `--importe -3`, grupo inexistente y ayuda con `gasto anotar`.
+- Archivos actualizados: `feature_list.json` (`anotar-gasto` pasa a `accepted` con la evidencia de la validación) y `PROGRESS.md`.
+- Siguiente paso: especificar `ver-saldos` con la skill `feature-spec`.

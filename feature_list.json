@@ -27,7 +27,7 @@
     "depends_on": [
       "crear-grupo"
     ],
-    "status": "passing",
+    "status": "accepted",
     "verification": [
       "Tests de dominio del reparto a partes iguales, incluidos los céntimos sobrantes según docs/domain-model.md.",
       "Tests de la CLI a través de ejecutar con una carpeta temporal: el gasto queda guardado en el grupo y las entradas no válidas se rechazan sin guardar nada.",
@@ -36,7 +36,8 @@
     "evidence": [
       "2026-11-08: ./init.sh termina con código 0 (pnpm typecheck sin errores, pnpm test con 114 tests en 7 ficheros).",
       "Escenarios 1 a 14 de docs/specs/anotar-gasto.md: tests/gasto-anotar.test.ts y tests/cli.test.ts. Reparto, céntimos sobrantes y anotación: tests/gasto.test.ts. Lectura y formato de importes: tests/dinero.test.ts.",
-      "Prueba a mano con CUENTAS_DIR en una carpeta temporal: grupo crear \"Piso Lavapiés\" --miembros Ana,Bea,Carlos y gasto anotar \"Piso Lavapiés\" \"Cena\" --importe 10,00 --pagador Carlos muestra Partes: Ana 3,34 €, Bea 3,33 € y Carlos 3,33 € y guarda importeCentimos 1000. Una segunda anotación recibe el id 2. Con --importe -3 termina con código 1, dice que el importe tiene que ser mayor que cero y el fichero no cambia."
+      "Prueba a mano con CUENTAS_DIR en una carpeta temporal: grupo crear \"Piso Lavapiés\" --miembros Ana,Bea,Carlos y gasto anotar \"Piso Lavapiés\" \"Cena\" --importe 10,00 --pagador Carlos muestra Partes: Ana 3,34 €, Bea 3,33 € y Carlos 3,33 € y guarda importeCentimos 1000. Una segunda anotación recibe el id 2. Con --importe -3 termina con código 1, dice que el importe tiene que ser mayor que cero y el fichero no cambia.",
+      "2026-11-08: validación con la skill feature-validator, veredicto accept. ./init.sh con código 0 (114 tests en 7 ficheros), escenarios 1 a 14 cubiertos por tests y prueba a mano con CUENTAS_DIR temporal (escenario 1, id 2 en la segunda anotación, --importe -3, grupo inexistente y ayuda). Sin hallazgos críticos, altos ni medios."
     ],
     "notes": "Reglas 1, 2, 4, 5, 6 y 7 de docs/domain-model.md. Preguntas abiertas que se cierran en su spec: formato del importe al escribirlo, orden alfabético con tildes, cómo se indica el grupo y cómo se identifica un gasto (lo necesita borrar-gasto)."
   },
