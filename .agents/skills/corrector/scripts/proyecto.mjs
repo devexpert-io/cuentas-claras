@@ -137,13 +137,18 @@ export function sesionesDeProgress(raiz) {
   return salida;
 }
 
-/** La última sesión de PROGRESS.md que valida esa feature y dice su veredicto. */
+/**
+ * La última sesión de PROGRESS.md que valida esa feature y dice su veredicto. Si la sesión tiene una línea
+ * "Objetivo", tiene que nombrar la feature y la validación. Las líneas de "Siguiente paso" no cuentan: hablan
+ * de la sesión de después.
+ */
 export function sesionDeValidacion(raiz, id) {
-  const sesiones = sesionesDeProgress(raiz).filter(
-    (s) =>
-      s.texto.includes(id) &&
-      /feature-validator|\bvalida/i.test(s.texto) &&
-      /veredicto\W{0,4}[^\n]{0,20}\b(accept|revise|block)\b/i.test(s.texto),
-  );
+  const sesiones = sesionesDeProgress(raiz).filter((s) => {
+    const lineas = s.texto.split("\n").filter((l) => !/^\s*[-*]\s*\**siguiente paso/i.test(l));
+    const texto = lineas.join("\n");
+    const objetivo = lineas.find((l) => /^\s*[-*]\s*\**objetivo/i.test(l));
+    const deEstaFeature = objetivo ? objetivo.includes(id) && /valid/i.test(objetivo) : texto.includes(id) && /feature-validator|\bvalida/i.test(texto);
+    return deEstaFeature && /veredicto\W{0,4}[^\n]{0,20}\b(accept|revise|block)\b/i.test(texto);
+  });
   return sesiones.at(-1) ?? null;
 }
