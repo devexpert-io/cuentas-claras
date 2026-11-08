@@ -92,7 +92,10 @@ function comprobacionesFijas(skill) {
 async function revisar({ skill, raiz, modelo }) {
   const sistema = readFileSync(join(SKILL, "rubricas", "ejercicio-8.md"), "utf8").replace(/\r\n/g, "\n");
   const entrada = { nombre: skill.datos.name, descripcion: skill.datos.description, instrucciones: skill.cuerpo.slice(0, 8000) };
-  const { datos: rubrica, coste: c1 } = await modelo(sistema, JSON.stringify(entrada, null, 2), { claves: ["peticiones"] });
+  const { datos: rubrica, coste: c1 } = await modelo(sistema, JSON.stringify(entrada, null, 2), {
+    claves: ["peticiones"],
+    valida: (d) => Array.isArray(d.peticiones) && d.peticiones.length === 3 && d.peticiones.every((p) => typeof p?.texto === "string"),
+  });
 
   // Como el agente: solo nombre y descripción de todas las skills (las del repo y las del curso).
   const catalogo = new Map();
@@ -105,7 +108,7 @@ async function revisar({ skill, raiz, modelo }) {
   const { datos: seleccion, coste: c2 } = await modelo(
     sistemaSeleccion,
     JSON.stringify({ skills: [...catalogo].map(([name, description]) => ({ name, description })), peticiones: peticiones.map((p, i) => ({ n: i + 1, texto: p.texto })) }, null, 2),
-    { claves: ["elecciones"] },
+    { claves: ["elecciones"], valida: (d) => Array.isArray(d.elecciones) && peticiones.every((_, i) => d.elecciones.some((e) => Number(e?.n) === i + 1)) },
   );
   const elegidas = new Map((seleccion?.elecciones ?? []).map((e) => [Number(e.n), e.skill]));
   const pruebas = peticiones.map((p, i) => {
