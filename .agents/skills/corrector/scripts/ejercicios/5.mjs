@@ -2,7 +2,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { escenarios, idDeFeature, seccion, secciones, tieneComando, tieneGiven, tieneThen, tieneWhen, vinetas } from "../spec.mjs";
+import { escenarios, idDeFeature, seccion, secciones, tieneComando, tieneThen, tieneWhen, vinetas } from "../spec.mjs";
 import { conBarras } from "../plataforma.mjs";
 
 const SKILL = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -44,10 +44,10 @@ function comprobacionesFijas(md, lista) {
   }
 
   const esc = escenarios(seccion(partes, SECCIONES[3])?.cuerpo ?? "");
-  const incompletos = esc.filter((e) => !(tieneGiven(e.texto) && tieneWhen(e.texto) && tieneThen(e.texto)));
+  const incompletos = esc.filter((e) => !(tieneWhen(e.texto) && tieneThen(e.texto)));
   if (esc.length < 2) fijas.push({ ok: false, t: `Hay ${esc.length} escenario(s). Hacen falta al menos dos: el normal y uno de error` });
-  else if (incompletos.length) fijas.push({ ok: false, t: `Escenarios sin Given, When y Then completos: ${incompletos.map((e) => e.n).join(", ")}` });
-  else fijas.push({ ok: true, t: `${esc.length} escenarios con Given, When y Then` });
+  else if (incompletos.length) fijas.push({ ok: false, t: `Escenarios sin When o sin Then: ${incompletos.map((e) => e.n).join(", ")}` });
+  else fijas.push({ ok: true, t: `${esc.length} escenarios con When y Then` });
 
   const fuera = vinetas(seccion(partes, SECCIONES[2])?.cuerpo ?? "");
   fijas.push(fuera ? { ok: true, t: `${fuera} cosas fuera de alcance` } : { ok: false, t: "No dice qué se queda fuera de alcance" });
@@ -66,6 +66,7 @@ async function revisarCriterios({ raiz, lista, id, esc, partes, modelo }) {
   const dominio = join(raiz, "docs", "domain-model.md");
   const entrada = {
     feature: feature ? { id: feature.id, title: feature.title, user_visible_behavior: feature.user_visible_behavior } : null,
+    goal: seccion(partes, SECCIONES[1])?.cuerpo.trim() ?? "",
     escenarios: esc,
     fuera_de_alcance: seccion(partes, SECCIONES[2])?.cuerpo.trim() ?? "",
     verificacion: seccion(partes, SECCIONES[6])?.cuerpo.trim() ?? "",
@@ -101,6 +102,21 @@ function informe({ ruta, raiz, fijas, esc, revision, coste }) {
       }
     }
   }
+  const todos = revision?.cobertura ?? [];
+  const huecos = todos.filter((h) => h.tipo !== "caso");
+  const sugerencias = todos.filter((h) => h.tipo === "caso");
+  const propuesta = (texto) => {
+    const pasos = texto.replace(/\s*\n\s*/g, " ").split(/\s+(?=(?:When|Then|And|Cuando|Entonces)\s)/);
+    return ["      Prueba con:", ...pasos.map((p) => `        ${p}`)];
+  };
+  if (huecos.length) l.push("", "Lo que ningún escenario comprueba");
+  for (const h of huecos) {
+    marcados++;
+    l.push(`  ⚠ ${h.falta}`);
+    if (h.escenario_propuesto) l.push(...propuesta(h.escenario_propuesto));
+  }
+  if (sugerencias.length) l.push("", "Sugerencias (no bloquean)");
+  for (const h of sugerencias) l.push(`  · ${h.falta}`);
   const v = revision?.verificacion;
   if (v && v.veredicto !== "comprobable") {
     marcados++;
@@ -114,7 +130,7 @@ function informe({ ruta, raiz, fijas, esc, revision, coste }) {
       : "Veredicto: revise. Corrige lo marcado y vuelve a pasar el corrector.",
   );
   if (coste != null) l.push(`(revisión: ${coste.toFixed(4)} $)`);
-  return { veredicto, marcados: escenariosMarcados, texto: l.join("\n") };
+  return { veredicto, marcados: escenariosMarcados, cobertura: huecos.length > 0, texto: l.join("\n") };
 }
 
 export async function corregirEjercicio({ raiz, fichero, modelo }) {
