@@ -4,8 +4,8 @@ const BASE = process.env.DEVEXPERT_BASE_URL ?? "https://inference.devexpert.io/v
 const MODELO = process.env.DEVEXPERT_MODEL ?? "chat";
 const TIEMPO_MAXIMO = 120_000;
 // Tope de tokens de salida (incluido el razonamiento). A veces el modelo se queda razonando sin parar:
-// con el tope, esa vuelta cuesta como mucho unos 2 céntimos y se reintenta.
-const MAX_TOKENS = 16_000;
+// con el tope, esa vuelta cuesta como mucho unos 4 céntimos y se reintenta.
+const MAX_TOKENS = 32_000;
 
 /**
  * Devuelve { datos, coste } con la respuesta ya convertida desde JSON. Reintenta si no lo es, si le faltan
