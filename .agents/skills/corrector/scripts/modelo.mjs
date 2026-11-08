@@ -11,10 +11,10 @@ const ESFUERZO = process.env.DEVEXPERT_REASONING_EFFORT ?? "low";
 
 /**
  * Devuelve { datos, coste } con la respuesta ya convertida desde JSON. Reintenta si no lo es, si le faltan
- * las claves de `claves`, si se corta por el tope de tokens, si tarda más de 2 minutos o si falla el servidor.
+ * las claves de `claves`, si `valida` la rechaza, si se corta por el tope de tokens, si tarda más de 2 minutos o si falla el servidor.
  * El coste suma todos los intentos.
  */
-export async function llamarModelo(sistema, usuario, { claves = [] } = {}) {
+export async function llamarModelo(sistema, usuario, { claves = [], valida = () => true } = {}) {
   const clave = process.env.DEVEXPERT_API_KEY;
   if (!clave) {
     throw new Error("Falta DEVEXPERT_API_KEY. Pon la clave del curso en esa variable de entorno.");
@@ -59,8 +59,8 @@ export async function llamarModelo(sistema, usuario, { claves = [] } = {}) {
     try {
       const datos = JSON.parse(d.choices[0].message.content);
       const faltan = claves.filter((c) => !(datos && typeof datos === "object" && c in datos));
-      if (datos && typeof datos === "object" && faltan.length === 0) return { datos, coste };
-      ultimoError = new Error(faltan.length ? `a la respuesta le falta ${faltan.join(", ")}` : "la respuesta no es un objeto");
+      if (datos && typeof datos === "object" && faltan.length === 0 && valida(datos)) return { datos, coste };
+      ultimoError = new Error(faltan.length ? `a la respuesta le falta ${faltan.join(", ")}` : "la respuesta no tiene la forma que pide la rúbrica");
     } catch (e) {
       ultimoError = e;
     }
