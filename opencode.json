@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "devexpert/chat",
+  "provider": {
+    "devexpert": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "DevExpert",
+      "options": {
+        "baseURL": "https://inference.devexpert.io/v1",
+        "apiKey": "{env:DEVEXPERT_API_KEY}"
+      },
+      "models": {
+        "chat": { "name": "DevExpert Chat", "reasoning": true, "tool_call": true }
+      }
+    }
+  }
+}
