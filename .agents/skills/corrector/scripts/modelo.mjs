@@ -3,9 +3,11 @@
 const BASE = process.env.DEVEXPERT_BASE_URL ?? "https://inference.devexpert.io/v1";
 const MODELO = process.env.DEVEXPERT_MODEL ?? "chat";
 const TIEMPO_MAXIMO = 120_000;
-// Tope de tokens de salida (incluido el razonamiento). A veces el modelo se queda razonando sin parar:
-// con el tope, esa vuelta cuesta como mucho unos 4 céntimos y se reintenta.
-const MAX_TOKENS = 32_000;
+// Tope de tokens de salida (incluido el razonamiento). Con el esfuerzo de razonamiento por defecto, el modelo
+// a veces se queda razonando sin parar (32.000 tokens y casi 4 céntimos sin respuesta). Con "low" responde en
+// unos segundos y, si aun así se pasa del tope, se reintenta.
+const MAX_TOKENS = 16_000;
+const ESFUERZO = process.env.DEVEXPERT_REASONING_EFFORT ?? "low";
 
 /**
  * Devuelve { datos, coste } con la respuesta ya convertida desde JSON. Reintenta si no lo es, si le faltan
@@ -30,6 +32,7 @@ export async function llamarModelo(sistema, usuario, { claves = [] } = {}) {
           model: MODELO,
           temperature: 0,
           max_tokens: MAX_TOKENS,
+          reasoning_effort: ESFUERZO,
           response_format: { type: "json_object" },
           messages: [
             { role: "system", content: sistema },
