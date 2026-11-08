@@ -29,6 +29,8 @@
 9. Los saldos de un grupo siempre suman cero.
 10. La liquidación es la lista con el menor número de pagos propuestos que deja todos los saldos a cero. Calcularla no cambia nada: los pagos solo cuentan cuando se registran.
 11. Dos grupos no pueden tener el mismo nombre, comparado igual que los nombres de los miembros.
+12. Cada gasto tiene un identificador entero dentro de su grupo: el mayor que ya existe más uno. No cambia y no se reutiliza.
+13. El orden alfabético de la regla 4 no distingue mayúsculas ni tildes: "Ángel" va antes que "Bea" y "carlos" después.
 
 ## States and Lifecycles
 

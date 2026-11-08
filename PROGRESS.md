@@ -5,9 +5,9 @@
 - Raíz del repositorio: `.` (la carpeta que contiene este archivo)
 - Ruta estándar de arranque: `./init.sh`
 - Ruta estándar de verificación: `./init.sh` (instalación con el lockfile, `pnpm typecheck` y `pnpm test`)
-- Siguiente feature lista: `anotar-gasto`, con su spec en `docs/specs/anotar-gasto.md` y sin implementar. `crear-grupo` está `accepted`.
+- `anotar-gasto` está `passing`, pendiente de validar con `feature-validator` en una sesión nueva. `crear-grupo` está `accepted`.
 - Bloqueo actual: ninguno
-- Última verificación: 2026-11-08, `./init.sh` con código 0 (44 tests)
+- Última verificación: 2026-11-08, `./init.sh` con código 0 (114 tests)
 
 ## Session Log
 
@@ -53,3 +53,14 @@
 - Evidencia: veredicto `accept`, sin escenarios marcados ni huecos de cobertura. Al principio marcó que ningún escenario decía cuánto le toca a cada uno: se añadieron los escenarios 1 (10,00 € entre tres que paga Carlos: 3,34 €, 3,33 € y 3,33 €) y 2 (céntimos sobrantes con tildes y mayúsculas).
 - Archivos actualizados: `docs/specs/anotar-gasto.md`, `PROGRESS.md`.
 - Siguiente paso: implementar `anotar-gasto` en una sesión nueva siguiendo su spec (ejercicio 6).
+
+### Session 005
+
+- Fecha: 2026-11-08
+- Objetivo: implementar `anotar-gasto` siguiendo `docs/specs/anotar-gasto.md` (ejercicio 6).
+- Completado: orden `pnpm cuentas gasto anotar "<grupo>" "<concepto>" --importe 12,50 --pagador Ana [--participantes Ana,Bea]`. Importes en `src/dominio/dinero.ts`, reparto y anotación en `src/dominio/gasto.ts`, `leerGrupo` y `guardarGrupo` en `src/almacen.ts`, `enumerar` compartido en `src/ordenes/texto.ts`. Actualizados `ARCHITECTURE.md`, `docs/domain-model.md` (reglas 12 y 13) y `docs/risks-and-open-questions.md` (se cierran cuatro preguntas).
+- Verificación ejecutada: `./init.sh` completo y prueba a mano con `CUENTAS_DIR` en una carpeta temporal.
+- Evidencia: `./init.sh` termina con código 0, con 114 tests en 7 ficheros. Detalle en `feature_list.json`.
+- Archivos actualizados: `src/`, `tests/`, `ARCHITECTURE.md`, `docs/domain-model.md`, `docs/risks-and-open-questions.md`, `feature_list.json`, `PROGRESS.md`.
+- Riesgos o puntos abiertos: las partes no se guardan, se recalculan. `ver-saldos` tiene que usar el mismo `repartirIgual`.
+- Siguiente paso: validar `anotar-gasto` con la skill `feature-validator` en una sesión nueva (ejercicio 7).

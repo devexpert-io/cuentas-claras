@@ -12,7 +12,9 @@ src/main.ts                  la terminal: process.argv, salida y código de sali
        └─ src/ordenes/       una orden por fichero: lee opciones, llama al dominio y al almacén, redacta los mensajes
             ├─ src/argumentos.ts    lectura de opciones, común a todas las órdenes
             ├─ src/almacen.ts       ficheros JSON en la carpeta de datos
-            └─ src/dominio/         reglas de docs/domain-model.md en funciones puras
+            ├─ src/ordenes/texto.ts textos comunes, como enumerar nombres
+            └─ src/dominio/         reglas de docs/domain-model.md en funciones puras:
+                                    grupo.ts, dinero.ts (importes en céntimos) y gasto.ts (reparto y anotación)
 ```
 
 - `src/dominio/` no importa módulos de Node ni de las otras capas. Recibe datos y devuelve un resultado o un error con su mensaje en español.
@@ -24,6 +26,8 @@ src/main.ts                  la terminal: process.argv, salida y código de sali
 
 - La carpeta de datos es la de `CUENTAS_DIR` o, si no tiene valor, `.cuentas/` en la carpeta de trabajo. Con `pnpm cuentas`, la carpeta de trabajo es la raíz del proyecto.
 - Cada grupo va en su propio fichero JSON, con el nombre que da `claveDeNombre`: `Piso Lavapiés` se guarda en `piso-lavapies.json`.
+- El fichero tiene `nombre`, `miembros` y, desde el primer gasto, `gastos`: cada uno con `id`, `concepto`, `importeCentimos`, `pagador` y `participantes`. Las partes de cada participante no se guardan: se recalculan con `repartirIgual`.
+- `leerGrupo` valida lo que lee (JSON, campos y que pagador y participantes sean miembros) y devuelve `ilegible` con el motivo en lugar de lanzar. Un fichero sin `gastos` se lee con la lista vacía. `guardarGrupo` sobrescribe el fichero de un grupo que ya existe.
 - Las rutas de datos se construyen siempre con `claveDeNombre`, nunca con lo que escribe el usuario tal cual. Así ningún nombre puede apuntar fuera de la carpeta de datos.
 - Crear un fichero de datos nunca sobrescribe otro: se escribe con el flag `wx`.
 - Las features que añadan datos a un grupo (gastos, pagos) amplían su fichero y tienen que aceptar los ficheros creados antes, que no tienen esos campos.
