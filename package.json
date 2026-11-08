@@ -1,0 +1,22 @@
+{
+  "name": "cuentas-claras",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CLI para repartir los gastos de un grupo. Proyecto de referencia del curso de entrada de DevExpert.",
+  "type": "module",
+  "packageManager": "pnpm@10.18.3",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "cuentas": "tsx src/main.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
+}
