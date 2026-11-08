@@ -5,7 +5,7 @@
 - Raíz del repositorio: `.` (la carpeta que contiene este archivo)
 - Ruta estándar de arranque: `./init.sh`
 - Ruta estándar de verificación: `./init.sh` (instalación con el lockfile, `pnpm typecheck` y `pnpm test`)
-- Siguiente feature lista: `anotar-gasto`. `crear-grupo` está `accepted`.
+- Siguiente feature lista: `anotar-gasto`, con su spec en `docs/specs/anotar-gasto.md` y sin implementar. `crear-grupo` está `accepted`.
 - Bloqueo actual: ninguno
 - Última verificación: 2026-11-08, `./init.sh` con código 0 (44 tests)
 
@@ -43,3 +43,13 @@
 - Verificación ejecutada: `./init.sh` con código 0 (44 tests en 4 ficheros). Revisión del diff de `feat: crear-grupo` contra `docs/specs/crear-grupo.md`: se queda dentro del alcance y no adelanta trabajo de otras features. Prueba a mano con `CUENTAS_DIR` en una carpeta temporal: escenario 1 (mensaje exacto, código 0 y `piso-lavapies.json`), escenario 7 (`piso lavapies` rechazado como grupo existente, código 1) y escenario 9 (`../fuera` se guarda como `fuera.json` dentro de la carpeta de datos).
 - Archivos actualizados: `feature_list.json` (`crear-grupo` pasa a `accepted`) y `PROGRESS.md`.
 - Siguiente paso: especificar `anotar-gasto` con la skill `feature-spec` (ejercicio 5).
+
+### Session 004
+
+- Fecha: 2026-11-08
+- Objetivo: especificar `anotar-gasto` con la skill `feature-spec` (ejercicio 5).
+- Completado: spec en `docs/specs/anotar-gasto.md` con 14 escenarios. Decisiones: el grupo se indica por su nombre, el importe se escribe con coma o punto y como mucho dos decimales, los céntimos sobrantes van por orden alfabético sin mayúsculas ni tildes aunque pague otro, la confirmación muestra la parte de cada participante y cada gasto tiene un `id` entero que no se reutiliza.
+- Verificación ejecutada: corrector del ejercicio 5 (`node .agents/skills/corrector/scripts/corregir.mjs 5`).
+- Evidencia: veredicto `accept`, sin escenarios marcados ni huecos de cobertura. Al principio marcó que ningún escenario decía cuánto le toca a cada uno: se añadieron los escenarios 1 (10,00 € entre tres que paga Carlos: 3,34 €, 3,33 € y 3,33 €) y 2 (céntimos sobrantes con tildes y mayúsculas).
+- Archivos actualizados: `docs/specs/anotar-gasto.md`, `PROGRESS.md`.
+- Siguiente paso: implementar `anotar-gasto` en una sesión nueva siguiendo su spec (ejercicio 6).
