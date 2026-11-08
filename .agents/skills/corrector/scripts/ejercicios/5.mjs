@@ -134,7 +134,7 @@ function informe({ ruta, raiz, fijas, esc, revision, coste }) {
       : "Veredicto: revise. Corrige lo marcado y vuelve a pasar el corrector.",
   );
   if (coste != null) l.push(`(revisión: ${coste.toFixed(4)} $)`);
-  return { veredicto, marcados: escenariosMarcados, cobertura: huecos.length > 0, texto: l.join("\n") };
+  return { veredicto, fijasOk: fijas.every((f) => f.ok), marcados: escenariosMarcados, cobertura: huecos.length > 0, texto: l.join("\n") };
 }
 
 export async function corregirEjercicio({ raiz, fichero, modelo }) {
