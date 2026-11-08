@@ -20,7 +20,7 @@
 
 1. Los importes van en euros con dos decimales. Por dentro se guardan en céntimos, como números enteros: 12,50 € son 1250 céntimos. Nunca se calcula con decimales.
 2. Un importe tiene que ser mayor que cero. Vale para gastos y para pagos.
-3. Un grupo tiene al menos 2 miembros y cada nombre aparece una sola vez.
+3. Un grupo tiene al menos 2 miembros y cada nombre aparece una sola vez. Dos nombres son el mismo si solo cambian las mayúsculas, las tildes, los espacios o los signos: "Ana" y "ana", "Ángel" y "Angel". Cada nombre se guarda como se escribió, sin espacios de sobra, y tiene que tener al menos una letra o un número.
 4. Un gasto se reparte a partes iguales entre sus participantes. Si sobran céntimos, se reparten de uno en uno entre los participantes por orden alfabético. Ejemplo: 10,00 € entre Ana, Bea y Carlos son 3,34 € para Ana y 3,33 € para Bea y para Carlos.
 5. Las partes de un gasto suman exactamente su importe.
 6. Si no se indican participantes, el gasto se reparte entre todos los miembros del grupo.
@@ -28,6 +28,7 @@
 8. El saldo de un miembro es lo que ha pagado en gastos, menos sus partes, más lo que ha pagado a otros miembros, menos lo que ha recibido de ellos. Positivo: le deben. Negativo: debe.
 9. Los saldos de un grupo siempre suman cero.
 10. La liquidación es la lista con el menor número de pagos propuestos que deja todos los saldos a cero. Calcularla no cambia nada: los pagos solo cuentan cuando se registran.
+11. Dos grupos no pueden tener el mismo nombre, comparado igual que los nombres de los miembros.
 
 ## States and Lifecycles
 

@@ -8,6 +8,7 @@ Este repositorio contiene Cuentas claras, una CLI en TypeScript para repartir lo
 - `docs/build-brief.md` — problema, objetivos, MVP y lo que queda fuera.
 - `docs/domain-model.md` — conceptos y reglas numeradas de importes, reparto y saldos.
 - `docs/risks-and-open-questions.md` — riesgos, supuestos y preguntas abiertas.
+- `ARCHITECTURE.md` — capas, dirección de las dependencias y dónde se guardan los datos. Leer antes de tocar `src/`.
 
 Leer solo cuando aplique:
 
