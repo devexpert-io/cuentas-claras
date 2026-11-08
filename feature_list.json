@@ -5,7 +5,7 @@
     "title": "Crear un grupo con sus miembros",
     "user_visible_behavior": "Desde la terminal se crea un grupo con un nombre y al menos 2 miembros. El grupo queda guardado en la carpeta de datos y la CLI lo confirma. Un nombre vacío, menos de 2 miembros, un nombre de miembro repetido o un grupo que ya existe se rechazan con un mensaje claro y sin guardar nada.",
     "depends_on": [],
-    "status": "passing",
+    "status": "accepted",
     "verification": [
       "Tests de dominio de las reglas del grupo: al menos 2 miembros y ningún nombre repetido.",
       "Tests de la CLI a través de ejecutar con una carpeta temporal en CUENTAS_DIR: el grupo queda guardado y los casos no válidos se rechazan sin guardar nada.",
@@ -14,7 +14,8 @@
     "evidence": [
       "2026-11-08: ./init.sh termina con código 0 (pnpm typecheck sin errores, pnpm test con 44 tests en 4 ficheros).",
       "Escenarios 1 a 11 de docs/specs/crear-grupo.md: tests/grupo-crear.test.ts y tests/cli.test.ts. Reglas del grupo: tests/grupo.test.ts. Lectura de opciones: tests/argumentos.test.ts.",
-      "Prueba a mano con CUENTAS_DIR en una carpeta temporal: pnpm cuentas grupo crear con el nombre Piso Lavapiés y los miembros Ana,Bea,Carlos termina con código 0 y crea piso-lavapies.json con el nombre y los miembros. Repetir la orden termina con código 1 (ya existe), igual que con Ana,ana (mismo miembro) y con el nombre sin comillas (sobra un argumento)."
+      "Prueba a mano con CUENTAS_DIR en una carpeta temporal: pnpm cuentas grupo crear con el nombre Piso Lavapiés y los miembros Ana,Bea,Carlos termina con código 0 y crea piso-lavapies.json con el nombre y los miembros. Repetir la orden termina con código 1 (ya existe), igual que con Ana,ana (mismo miembro) y con el nombre sin comillas (sobra un argumento).",
+      "2026-11-08: validación independiente con feature-validator, veredicto accept. ./init.sh con código 0 (44 tests) y prueba a mano de los escenarios 1, 7 y 9 con CUENTAS_DIR en una carpeta temporal."
     ],
     "notes": "Regla 3 de docs/domain-model.md. Es la primera feature que guarda datos: fija dónde y cómo se guarda un grupo y cómo se organizan las órdenes de la CLI. Preguntas abiertas que se cierran en su spec: si los nombres distinguen mayúsculas o tildes, y cómo se guarda cada grupo."
   },
@@ -23,7 +24,9 @@
     "area": "gastos",
     "title": "Anotar un gasto repartido a partes iguales",
     "user_visible_behavior": "Se anota en un grupo un gasto con concepto, importe y pagador. Se reparte a partes iguales entre todos los miembros, o solo entre los participantes que se indiquen, y queda guardado en el grupo. La CLI confirma lo que se ha anotado.",
-    "depends_on": ["crear-grupo"],
+    "depends_on": [
+      "crear-grupo"
+    ],
     "status": "not_started",
     "verification": [
       "Tests de dominio del reparto a partes iguales, incluidos los céntimos sobrantes según docs/domain-model.md.",
@@ -38,7 +41,9 @@
     "area": "saldos",
     "title": "Ver el saldo de cada miembro",
     "user_visible_behavior": "La CLI muestra el saldo de cada miembro de un grupo en euros: positivo si le deben y negativo si debe. Los saldos suman cero.",
-    "depends_on": ["anotar-gasto"],
+    "depends_on": [
+      "anotar-gasto"
+    ],
     "status": "not_started",
     "verification": [
       "Tests de dominio del cálculo de saldos a partir de los gastos, que comprueban también que suman cero.",
@@ -53,7 +58,9 @@
     "area": "liquidacion",
     "title": "Liquidar con la lista más corta de pagos",
     "user_visible_behavior": "La CLI muestra la lista más corta de pagos propuestos (quién paga, a quién y cuánto) para que todos los saldos de un grupo queden a cero. No cambia nada de lo guardado.",
-    "depends_on": ["ver-saldos"],
+    "depends_on": [
+      "ver-saldos"
+    ],
     "status": "not_started",
     "verification": [
       "Tests de dominio: al aplicar los pagos propuestos todos los saldos quedan a cero, y el número de pagos es el mínimo, comparado con una búsqueda exhaustiva en grupos pequeños.",
@@ -68,7 +75,9 @@
     "area": "pagos",
     "title": "Registrar un pago entre miembros",
     "user_visible_behavior": "Se registra que un miembro le ha pagado un importe a otro. El pago queda guardado en el grupo y cambia el saldo de los dos.",
-    "depends_on": ["ver-saldos"],
+    "depends_on": [
+      "ver-saldos"
+    ],
     "status": "not_started",
     "verification": [
       "Tests de dominio: el pago cambia el saldo de quien paga y de quien recibe, y los saldos siguen sumando cero.",
@@ -83,7 +92,9 @@
     "area": "gastos",
     "title": "Borrar un gasto anotado por error",
     "user_visible_behavior": "Un gasto anotado por error se borra del grupo. A partir de ahí deja de contar en los saldos.",
-    "depends_on": ["anotar-gasto"],
+    "depends_on": [
+      "anotar-gasto"
+    ],
     "status": "not_started",
     "verification": [
       "Test de dominio: después de borrar un gasto, el grupo queda igual que si no se hubiera anotado.",
@@ -98,7 +109,9 @@
     "area": "gastos",
     "title": "Repartir un gasto por partes o porcentajes",
     "user_visible_behavior": "Al anotar un gasto se puede repartir por partes (por ejemplo, 2 partes para Ana y 1 para Bea) o por porcentajes, en lugar de a partes iguales. Las partes siguen sumando exactamente el importe.",
-    "depends_on": ["anotar-gasto"],
+    "depends_on": [
+      "anotar-gasto"
+    ],
     "status": "not_started",
     "verification": [
       "Tests de dominio del reparto por partes y por porcentajes, con las partes sumando exactamente el importe.",

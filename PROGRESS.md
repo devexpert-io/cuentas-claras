@@ -5,7 +5,7 @@
 - Raíz del repositorio: `.` (la carpeta que contiene este archivo)
 - Ruta estándar de arranque: `./init.sh`
 - Ruta estándar de verificación: `./init.sh` (instalación con el lockfile, `pnpm typecheck` y `pnpm test`)
-- Siguiente feature lista: ninguna hasta validar `crear-grupo` (`passing`). Las demás dependen de ella.
+- Siguiente feature lista: `anotar-gasto`. `crear-grupo` está `accepted`.
 - Bloqueo actual: ninguno
 - Última verificación: 2026-11-08, `./init.sh` con código 0 (44 tests)
 
@@ -34,3 +34,12 @@
 - Decisiones: los nombres no distinguen mayúsculas, tildes, espacios ni signos. Cada grupo va en `<clave del nombre>.json` y crearlo nunca sobrescribe otro. Sin máximo de miembros. No hay E2E: `main.ts` solo conecta `ejecutar` con la terminal y la prueba a mano cubre esa conexión.
 - Riesgos o puntos abiertos: el fichero del grupo todavía no tiene gastos ni pagos. Las features que los añadan tienen que aceptar los ficheros creados antes.
 - Siguiente paso: validar `crear-grupo` con la skill `feature-validator` en una sesión nueva.
+
+### Session 003
+
+- Fecha: 2026-11-08
+- Objetivo: validar `crear-grupo` en una sesión que no escribió el código, con `feature-validator`.
+- Veredicto: **accept**. Sin hallazgos críticos ni altos.
+- Verificación ejecutada: `./init.sh` con código 0 (44 tests en 4 ficheros). Revisión del diff de `feat: crear-grupo` contra `docs/specs/crear-grupo.md`: se queda dentro del alcance y no adelanta trabajo de otras features. Prueba a mano con `CUENTAS_DIR` en una carpeta temporal: escenario 1 (mensaje exacto, código 0 y `piso-lavapies.json`), escenario 7 (`piso lavapies` rechazado como grupo existente, código 1) y escenario 9 (`../fuera` se guarda como `fuera.json` dentro de la carpeta de datos).
+- Archivos actualizados: `feature_list.json` (`crear-grupo` pasa a `accepted`) y `PROGRESS.md`.
+- Siguiente paso: especificar `anotar-gasto` con la skill `feature-spec` (ejercicio 5).
