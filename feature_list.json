@@ -1,0 +1,107 @@
+[
+  {
+    "id": "crear-grupo",
+    "area": "grupos",
+    "title": "Crear un grupo con sus miembros",
+    "user_visible_behavior": "Desde la terminal se crea un grupo con un nombre y al menos 2 miembros. El grupo queda guardado en la carpeta de datos y la CLI lo confirma. Un nombre vacío, menos de 2 miembros, un nombre de miembro repetido o un grupo que ya existe se rechazan con un mensaje claro y sin guardar nada.",
+    "depends_on": [],
+    "status": "not_started",
+    "verification": [
+      "Tests de dominio de las reglas del grupo: al menos 2 miembros y ningún nombre repetido.",
+      "Tests de la CLI a través de ejecutar con una carpeta temporal en CUENTAS_DIR: el grupo queda guardado y los casos no válidos se rechazan sin guardar nada.",
+      "./init.sh termina con código 0."
+    ],
+    "evidence": [],
+    "notes": "Regla 3 de docs/domain-model.md. Es la primera feature que guarda datos: fija dónde y cómo se guarda un grupo y cómo se organizan las órdenes de la CLI. Preguntas abiertas que se cierran en su spec: si los nombres distinguen mayúsculas o tildes, y cómo se guarda cada grupo."
+  },
+  {
+    "id": "anotar-gasto",
+    "area": "gastos",
+    "title": "Anotar un gasto repartido a partes iguales",
+    "user_visible_behavior": "Se anota en un grupo un gasto con concepto, importe y pagador. Se reparte a partes iguales entre todos los miembros, o solo entre los participantes que se indiquen, y queda guardado en el grupo. La CLI confirma lo que se ha anotado.",
+    "depends_on": ["crear-grupo"],
+    "status": "not_started",
+    "verification": [
+      "Tests de dominio del reparto a partes iguales, incluidos los céntimos sobrantes según docs/domain-model.md.",
+      "Tests de la CLI a través de ejecutar con una carpeta temporal: el gasto queda guardado en el grupo y las entradas no válidas se rechazan sin guardar nada.",
+      "./init.sh termina con código 0."
+    ],
+    "evidence": [],
+    "notes": "Reglas 1, 2, 4, 5, 6 y 7 de docs/domain-model.md. Preguntas abiertas que se cierran en su spec: formato del importe al escribirlo, orden alfabético con tildes, cómo se indica el grupo y cómo se identifica un gasto (lo necesita borrar-gasto)."
+  },
+  {
+    "id": "ver-saldos",
+    "area": "saldos",
+    "title": "Ver el saldo de cada miembro",
+    "user_visible_behavior": "La CLI muestra el saldo de cada miembro de un grupo en euros: positivo si le deben y negativo si debe. Los saldos suman cero.",
+    "depends_on": ["anotar-gasto"],
+    "status": "not_started",
+    "verification": [
+      "Tests de dominio del cálculo de saldos a partir de los gastos, que comprueban también que suman cero.",
+      "Test de la CLI a través de ejecutar con un grupo guardado en una carpeta temporal.",
+      "./init.sh termina con código 0."
+    ],
+    "evidence": [],
+    "notes": "Reglas 8 y 9 de docs/domain-model.md. Los saldos se calculan cada vez y no se guardan. registrar-pago añade después los pagos a este cálculo."
+  },
+  {
+    "id": "liquidar",
+    "area": "liquidacion",
+    "title": "Liquidar con la lista más corta de pagos",
+    "user_visible_behavior": "La CLI muestra la lista más corta de pagos propuestos (quién paga, a quién y cuánto) para que todos los saldos de un grupo queden a cero. No cambia nada de lo guardado.",
+    "depends_on": ["ver-saldos"],
+    "status": "not_started",
+    "verification": [
+      "Tests de dominio: al aplicar los pagos propuestos todos los saldos quedan a cero, y el número de pagos es el mínimo, comparado con una búsqueda exhaustiva en grupos pequeños.",
+      "Test de la CLI a través de ejecutar: el resultado es siempre el mismo para los mismos datos y el fichero del grupo no cambia.",
+      "./init.sh termina con código 0."
+    ],
+    "evidence": [],
+    "notes": "Regla 10 de docs/domain-model.md. Riesgo: el método voraz no siempre da el mínimo (ver docs/risks-and-open-questions.md). Hace falta una regla fija para elegir entre listas igual de cortas."
+  },
+  {
+    "id": "registrar-pago",
+    "area": "pagos",
+    "title": "Registrar un pago entre miembros",
+    "user_visible_behavior": "Se registra que un miembro le ha pagado un importe a otro. El pago queda guardado en el grupo y cambia el saldo de los dos.",
+    "depends_on": ["ver-saldos"],
+    "status": "not_started",
+    "verification": [
+      "Tests de dominio: el pago cambia el saldo de quien paga y de quien recibe, y los saldos siguen sumando cero.",
+      "Tests de la CLI a través de ejecutar con una carpeta temporal: el pago queda guardado y las entradas no válidas se rechazan sin guardar nada.",
+      "./init.sh termina con código 0."
+    ],
+    "evidence": [],
+    "notes": "Reglas 2, 7, 8 y 9 de docs/domain-model.md. Depende de ver-saldos porque amplía su cálculo. Registrar los pagos que propone liquidar es la forma de dejar las cuentas a cero."
+  },
+  {
+    "id": "borrar-gasto",
+    "area": "gastos",
+    "title": "Borrar un gasto anotado por error",
+    "user_visible_behavior": "Un gasto anotado por error se borra del grupo. A partir de ahí deja de contar en los saldos.",
+    "depends_on": ["anotar-gasto"],
+    "status": "not_started",
+    "verification": [
+      "Test de dominio: después de borrar un gasto, el grupo queda igual que si no se hubiera anotado.",
+      "Tests de la CLI a través de ejecutar con una carpeta temporal.",
+      "./init.sh termina con código 0."
+    ],
+    "evidence": [],
+    "notes": "Ciclo de vida del gasto en docs/domain-model.md: los gastos no se editan, se borran y se anotan de nuevo. Usa el identificador de gasto que decida anotar-gasto."
+  },
+  {
+    "id": "reparto-desigual",
+    "area": "gastos",
+    "title": "Repartir un gasto por partes o porcentajes",
+    "user_visible_behavior": "Al anotar un gasto se puede repartir por partes (por ejemplo, 2 partes para Ana y 1 para Bea) o por porcentajes, en lugar de a partes iguales. Las partes siguen sumando exactamente el importe.",
+    "depends_on": ["anotar-gasto"],
+    "status": "not_started",
+    "verification": [
+      "Tests de dominio del reparto por partes y por porcentajes, con las partes sumando exactamente el importe.",
+      "Tests de la CLI a través de ejecutar con una carpeta temporal.",
+      "./init.sh termina con código 0."
+    ],
+    "evidence": [],
+    "notes": "Fuera del MVP: el brief deja los repartos desiguales para más adelante. Va la última. Antes de especificarla, confirmar con el grupo que entra y actualizar docs/build-brief.md y docs/domain-model.md, incluida la regla de los céntimos sobrantes. Partes y porcentajes son dos formas de escribir el mismo reparto proporcional. Si la spec se pasa de 250 líneas, partirla en dos features."
+  }
+]
