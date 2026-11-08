@@ -2,6 +2,7 @@
 // Así se prueba sin lanzar procesos. src/main.ts la conecta con la terminal.
 
 import { carpetaDeDatos, type Entorno } from "./almacen.ts";
+import { gastoAnotar, USO_GASTO_ANOTAR } from "./ordenes/gasto-anotar.ts";
 import { grupoCrear, USO_GRUPO_CREAR } from "./ordenes/grupo-crear.ts";
 import type { Orden, Resultado } from "./ordenes/orden.ts";
 
@@ -21,6 +22,12 @@ const ORDENES: readonly DefinicionDeOrden[] = [
     uso: USO_GRUPO_CREAR,
     descripcion: "crea un grupo con sus miembros",
     ejecutar: grupoCrear,
+  },
+  {
+    palabras: ["gasto", "anotar"],
+    uso: USO_GASTO_ANOTAR,
+    descripcion: "anota un gasto repartido a partes iguales",
+    ejecutar: gastoAnotar,
   },
 ];
 

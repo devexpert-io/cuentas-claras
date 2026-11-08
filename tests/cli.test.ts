@@ -21,6 +21,18 @@ describe("cli", () => {
     expect(r.salida).toContain("CUENTAS_DIR");
   });
 
+  it("la ayuda incluye gasto anotar con su uso", () => {
+    expect(ejecutar(["ayuda"]).salida).toContain(
+      'gasto anotar "<grupo>" "<concepto>" --importe 12,50 --pagador Ana [--participantes Ana,Bea]',
+    );
+  });
+
+  it("trata como desconocidas gasto y gasto borrar", () => {
+    expect(ejecutar(["gasto"])).toMatchObject({ codigo: 1 });
+    expect(ejecutar(["gasto"]).salida).toContain("Orden desconocida: gasto\n");
+    expect(ejecutar(["gasto", "borrar", "1"]).salida).toContain("Orden desconocida: gasto borrar\n");
+  });
+
   it("trata como desconocida una orden a medias o con una acción que no existe", () => {
     const aMedias = ejecutar(["grupo"]);
     expect(aMedias.codigo).toBe(1);

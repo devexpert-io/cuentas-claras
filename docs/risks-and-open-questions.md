@@ -6,10 +6,6 @@
 
 ## Implementation-Time Questions
 
-- Cómo se indica en cada orden a qué grupo se refiere. Postura inicial: por su nombre, comparado igual que al crearlo.
-- Formato de los importes al escribirlos en la terminal. Postura inicial: coma o punto decimal y como mucho dos decimales ("12,50" o "12.50"). Se muestran siempre como "12,50 €".
-- Orden alfabético para los céntimos sobrantes cuando hay tildes o mayúsculas. Postura inicial: el orden del español, sin distinguir mayúsculas ni tildes ("Álvaro" va antes que "Bea").
-- Cómo se identifica un gasto para poder borrarlo. Postura inicial: un número dentro del grupo que la CLI muestra al anotarlo.
 - Qué lista mostrar cuando hay varias liquidaciones igual de cortas. Postura inicial: siempre la misma para los mismos saldos, elegida con una regla fija, para que se pueda probar.
 
 ## Later / Not MVP

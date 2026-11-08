@@ -2,8 +2,9 @@
 
 import { guardarGrupoNuevo } from "../almacen.ts";
 import { leerArgumentos } from "../argumentos.ts";
-import { claveDeNombre, crearGrupo } from "../dominio/grupo.ts";
+import { crearGrupo } from "../dominio/grupo.ts";
 import { exito, fallo, type Contexto, type Resultado } from "./orden.ts";
+import { enumerar } from "./texto.ts";
 
 export const USO_GRUPO_CREAR = 'grupo crear "<nombre>" --miembros Ana,Bea,Carlos';
 
@@ -46,14 +47,4 @@ export function grupoCrear(args: string[], contexto: Contexto): Resultado {
 
 function falloDeUso(mensaje: string): Resultado {
   return fallo(`${mensaje}\nUso: pnpm cuentas ${USO_GRUPO_CREAR}`);
-}
-
-// "Ana, Bea y Carlos". Delante de un nombre que empieza por el sonido i va "e": "Bea e Inés".
-function enumerar(nombres: readonly string[]): string {
-  const ultimo = nombres[nombres.length - 1];
-  if (nombres.length < 2 || ultimo === undefined) {
-    return nombres.join("");
-  }
-  const conjuncion = /^h?i([^aeiou]|$)/.test(claveDeNombre(ultimo)) ? "e" : "y";
-  return `${nombres.slice(0, -1).join(", ")} ${conjuncion} ${ultimo}`;
 }
