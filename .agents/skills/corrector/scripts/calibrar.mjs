@@ -5,14 +5,9 @@
 // Cada clave de esperado.json es un caso. Se comparan todos los campos que pone el esperado (veredicto,
 // marcados, cobertura...). Si el módulo del ejercicio exporta prepararCaso, prepara él el proyecto del caso.
 // Si no, el caso es un fichero de pruebas/ejercicio-N/ y el proyecto es pruebas/ejercicio-N/proyecto.
-// Las pruebas del ejercicio 5 están todavía sueltas en pruebas/, sin carpeta propia.
-import { existsSync, readFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 import { corregir, EJERCICIOS } from "./corregir.mjs";
-
-const PRUEBAS = resolve(dirname(fileURLToPath(import.meta.url)), "..", "pruebas");
-const leerJson = (ruta) => (existsSync(ruta) ? JSON.parse(readFileSync(ruta, "utf8").replace(/\r\n/g, "\n")) : null);
+import { leerJson, PRUEBAS } from "./proyecto.mjs";
 
 const [vueltasTexto, ...pedidos] = process.argv.slice(2);
 const vueltas = Number(vueltasTexto ?? 3);
@@ -20,8 +15,7 @@ const ejercicios = pedidos.length ? pedidos : Object.keys(EJERCICIOS);
 
 let fallos = 0;
 for (const ejercicio of ejercicios) {
-  let carpeta = join(PRUEBAS, `ejercicio-${ejercicio}`);
-  if (!existsSync(carpeta) && String(ejercicio) === "5") carpeta = PRUEBAS;
+  const carpeta = join(PRUEBAS, `ejercicio-${ejercicio}`);
   const esperado = leerJson(join(carpeta, "esperado.json"));
   if (!esperado) {
     console.log(`· ejercicio ${ejercicio}: sin pruebas`);

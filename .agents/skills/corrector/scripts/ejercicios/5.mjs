@@ -73,7 +73,7 @@ async function revisarCriterios({ raiz, lista, id, esc, partes, modelo }) {
     reglas_del_dominio: existsSync(dominio) ? readFileSync(dominio, "utf8").replace(/\r\n/g, "\n").slice(0, 6000) : "",
   };
   const sistema = readFileSync(join(SKILL, "rubricas", "ejercicio-5.md"), "utf8").replace(/\r\n/g, "\n");
-  return modelo(sistema, JSON.stringify(entrada, null, 2));
+  return modelo(sistema, JSON.stringify(entrada, null, 2), { claves: ["escenarios"] });
 }
 
 function informe({ ruta, raiz, fijas, esc, revision, coste }) {
