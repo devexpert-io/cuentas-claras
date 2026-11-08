@@ -13,7 +13,7 @@ import { llamarModelo } from "./modelo.mjs";
 import { esElPrincipal } from "./plataforma.mjs";
 
 export const EJERCICIOS = {
-
+  1: "./ejercicios/1.mjs",
 };
 
 export async function corregir(ejercicio, { raiz = process.cwd(), fichero, modelo = llamarModelo, ...extra } = {}) {
