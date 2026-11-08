@@ -22,6 +22,7 @@ export const EJERCICIOS = {
   6: "./ejercicios/6.mjs",
   7: "./ejercicios/7.mjs",
   8: "./ejercicios/8.mjs",
+  final: "./ejercicios/final.mjs",
 };
 
 export async function corregir(ejercicio, { raiz = process.cwd(), fichero, modelo = llamarModelo, ...extra } = {}) {

@@ -25,6 +25,7 @@ node .agents/skills/corrector/scripts/corregir.mjs <ejercicio> [fichero]
   - `6` (implementa la feature). En `cuentas-claras`, sin `[fichero]`: `./init.sh` y unos tests del curso para `anotar-gasto`. En un proyecto propio, `[fichero]` es la spec y se revisa el diff desde el último commit que la tocó.
   - `7` (valida en una sesión nueva). `[fichero]` es el id de la feature; en `cuentas-claras`, si no se indica, `anotar-gasto`. Mira que esté en `accepted` con evidencia, que `PROGRESS.md` tenga la sesión de validación con su veredicto y que la validación cite evidencia ejecutada.
   - `8` (crea tu propia skill). `[fichero]` es el nombre de la skill o la ruta de su `SKILL.md`; si no se indica, la única skill de `.agents/skills/` que no es del curso. Comprueba el frontmatter y le pasa a un modelo tres peticiones de prueba para ver si la cargaría cuando toca.
+  - `final` (dos features con el bucle completo). En `cuentas-claras`, sin `[fichero]`: `ver-saldos` y `liquidar` en `accepted`, con spec, evidencia y validación, `./init.sh` en verde y unos tests del curso. En un proyecto propio, `[fichero]` son los dos ids separados por una coma. Tarda un par de minutos.
 - Necesita la clave del curso en `DEVEXPERT_API_KEY`. Si falta, explícale al alumno cómo ponerla y no sigas.
 - Sale con código 0 si el veredicto es `accept`, con 1 si es `revise` y con 2 si no ha podido corregir.
 - Los ejercicios que ejecutan `./init.sh` o tests tardan un poco. Espera a que termine.
