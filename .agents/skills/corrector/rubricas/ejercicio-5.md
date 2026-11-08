@@ -48,6 +48,7 @@ Como mucho dos huecos de cada tipo, los más importantes. Si no hay ninguno clar
 - Juzga cada escenario solo por lo que dice el propio escenario. Si depende de una regla que no está escrita en él, es ambiguo aunque esa regla exista en otro documento del proyecto.
 - Usa las reglas del dominio que te pasan solo para proponer reescrituras coherentes con el proyecto, nunca para dar por bueno un escenario vago.
 - No inventes problemas. Si un escenario tiene estado, acción y resultado concretos, es "comprobable" aunque se pudiera escribir de otra forma.
+- No rehagas cálculos largos ni busques otras soluciones posibles. No te toca comprobar que los importes o las listas de un ejemplo son correctos, solo que son concretos y que se pueden comprobar.
 - La reescritura propuesta debe ser corta, en el mismo idioma que el escenario, en formato Given, When, Then, y con un ejemplo concreto.
 - En "cita", copia literalmente el fragmento problemático del escenario. Si es comprobable, deja "cita", "motivo" y "reescritura" vacíos.
 
