@@ -1,0 +1,4 @@
+node_modules/
+.cuentas/
+coverage/
+.DS_Store
