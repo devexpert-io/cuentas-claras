@@ -52,10 +52,11 @@ const sangrar = (texto) => texto.replace(/^/gm, "      ");
  * lo ejecuta con el vitest del proyecto y lo borra. Devuelve { ok, fallos: [títulos] }.
  */
 export function pasarTestsOcultos(raiz, fichero) {
-  const destino = join(raiz, "tests", `__corrector-${basename(fichero).replace(/\.ts$/, "")}.test.ts`);
+  const destino = join(raiz, "tests", `__corrector-${basename(fichero).replace(/\.gz$/, "").replace(/\.ts$/, "")}.test.ts`);
   const informe = join(mkdtempSync(join(tmpdir(), "corrector-")), "informe.json");
   mkdirSync(dirname(destino), { recursive: true });
-  copyFileSync(fichero, destino);
+  // Los tests van comprimidos (.ts.gz) para que el alumno y su agente no los vean en el repo.
+  writeFileSync(destino, fichero.endsWith(".gz") ? gunzipSync(readFileSync(fichero)) : readFileSync(fichero));
   try {
     const r = ejecutarEn(raiz, "pnpm", ["exec", "vitest", "run", conBarras(relative(raiz, destino)), "--reporter=json", `--outputFile=${informe}`]);
     const datos = leerJson(informe);

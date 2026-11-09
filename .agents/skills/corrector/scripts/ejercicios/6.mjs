@@ -7,7 +7,7 @@ import { escenarios, seccion, secciones } from "../spec.mjs";
 import { comprobarInit, comprobarTestsOcultos, ejecutarEn, leerJson, lineasDeFijas, PRUEBAS, proyectoDePrueba, SKILL } from "../proyecto.mjs";
 import { conBarras } from "../plataforma.mjs";
 
-export const TESTS_OCULTOS = join(PRUEBAS, "ejercicio-6", "anotar-gasto.oculto.ts");
+export const TESTS_OCULTOS = join(PRUEBAS, "ejercicio-6", "anotar-gasto.oculto.ts.gz");
 const MAX_TESTS = 30_000;
 const MAX_CODIGO = 15_000;
 
