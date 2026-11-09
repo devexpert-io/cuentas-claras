@@ -142,8 +142,8 @@ export async function corregirEjercicio({ raiz, modelo }) {
 }
 
 /**
- * Casos de calibración. pruebas/ejercicio-4/proyectos.tar.gz lleva, comprimidos para que no los encuentren las
- * búsquedas del agente, el repo en inicio-ejercicio-5 (base/) y los ficheros que cambian en cada caso.
+ * Casos de calibración. ejercicio-4/proyectos.tar.gz, en el material de CORRECTOR_PRUEBAS, lleva el repo en
+ * inicio-ejercicio-5 (base/) y los ficheros que cambian en cada caso.
  */
 export function prepararCaso({ carpeta, caso }) {
   const tmp = mkdtempSync(join(tmpdir(), "corrector-4-"));

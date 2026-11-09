@@ -162,7 +162,7 @@ function informePropio({ raiz, ruta, fijas, esc, revision, coste }) {
   return { veredicto, sinProbar, fuera: (revision?.fuera_de_alcance ?? []).length > 0, texto: l.join("\n") };
 }
 
-/** Casos de calibración (pruebas/ejercicio-6/esperado.json). */
+/** Casos de calibración (ejercicio-6/esperado.json, en el material de CORRECTOR_PRUEBAS). */
 export function prepararCaso({ carpeta, caso }) {
   if (caso.startsWith("propio-")) {
     const propio = join(carpeta, "propio");

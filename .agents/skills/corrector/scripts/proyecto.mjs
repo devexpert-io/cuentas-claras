@@ -1,5 +1,5 @@
 // Utilidades comunes de los correctores que miran el proyecto: comandos, tests ocultos y proyectos de prueba.
-import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, relative, resolve } from "node:path";
@@ -7,11 +7,32 @@ import { fileURLToPath } from "node:url";
 import { bash, conBarras, lanzar } from "./plataforma.mjs";
 
 export const SKILL = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+// Los tests del curso que pasa el corrector (pruebas/ejercicio-N/*.oculto.ts.gz). Van con la skill.
 export const PRUEBAS = join(SKILL, "pruebas");
 // Raíz del repo en el que está instalada la skill (.agents/skills/corrector → ../../..).
 export const REPO = resolve(SKILL, "..", "..", "..");
 
 export const leerJson = (ruta) => (existsSync(ruta) ? JSON.parse(readFileSync(ruta, "utf8").replace(/\r\n/g, "\n")) : null);
+
+/**
+ * La carpeta con el material para calibrar el corrector: los casos de cada ejercicio (ejercicio-N/, con su
+ * esperado.json), los proyectos de referencia (comun/) y los parches. No va en el repo del alumno. La tiene quien
+ * mantiene el curso y la pasa en CORRECTOR_PRUEBAS.
+ */
+export function materialDeCalibracion() {
+  const ruta = process.env.CORRECTOR_PRUEBAS;
+  if (!ruta) {
+    throw new Error(
+      "Falta CORRECTOR_PRUEBAS. Es la carpeta con el material para calibrar el corrector: los casos de cada ejercicio con su esperado.json, los proyectos de referencia y los parches. No va en el repo del alumno. La tiene quien mantiene el curso. Pásala así: CORRECTOR_PRUEBAS=<carpeta> node .agents/skills/corrector/scripts/calibrar.mjs [vueltas] [ejercicio...]",
+    );
+  }
+  const carpeta = resolve(ruta);
+  const conCasos = existsSync(carpeta) ? readdirSync(carpeta).filter((d) => existsSync(join(carpeta, d, "esperado.json"))) : [];
+  if (conCasos.length === 0) {
+    throw new Error(`CORRECTOR_PRUEBAS apunta a ${carpeta}, y ahí no está el material para calibrar: ninguna carpeta ejercicio-N/ con su esperado.json.`);
+  }
+  return carpeta;
+}
 
 /** Ejecuta un comando sin shell y devuelve { codigo, salida } con stdout y stderr juntos. */
 export function ejecutarEn(raiz, comando, args = [], opciones = {}) {
@@ -83,12 +104,12 @@ export function comprobarTestsOcultos(raiz, fichero, nombre) {
 const FUERA_DE_LA_BASE = new Set(["src", "tests", "node_modules", ".agents", ".claude", ".git", ".cuentas"]);
 
 /**
- * Proyecto de prueba para calibrar: los ficheros del repo (sin src/ ni tests/), encima las capas de
- * pruebas/ en orden y después los parches. Devuelve { raiz, limpiar }.
- * Cada capa es un .tar.gz de pruebas/ (sin la extensión en la llamada): así ni vitest ni tsc ni las
- * búsquedas del agente ven su código dentro del repo del alumno.
+ * Proyecto de prueba para calibrar: los ficheros del repo (sin src/ ni tests/), encima las capas del material
+ * de calibración en orden y después los parches. Devuelve { raiz, limpiar }.
+ * Cada capa es un .tar.gz del material (sin la extensión en la llamada), y cada parche, un .patch.gz.
  */
 export function proyectoDePrueba({ capas = [], parches = [] }) {
+  const material = materialDeCalibracion();
   const raiz = mkdtempSync(join(tmpdir(), "corrector-proyecto-"));
   const listado = ejecutarEn(REPO, "git", ["ls-files", "-z"]).salida.split("\0").filter(Boolean);
   for (const fichero of listado) {
@@ -97,13 +118,12 @@ export function proyectoDePrueba({ capas = [], parches = [] }) {
     copyFileSync(join(REPO, fichero), join(raiz, fichero));
   }
   for (const capa of capas) {
-    const r = ejecutarEn(raiz, "tar", ["-xzf", join(PRUEBAS, `${capa}.tar.gz`)]);
+    const r = ejecutarEn(raiz, "tar", ["-xzf", join(material, `${capa}.tar.gz`)]);
     if (r.codigo !== 0) throw new Error(`No se ha podido extraer ${capa}.tar.gz: ${r.salida}`);
   }
   for (const parche of parches) {
-    // Los parches van comprimidos (.patch.gz) por lo mismo que las capas.
     const temporal = join(raiz, ".parche-de-prueba.patch");
-    writeFileSync(temporal, gunzipSync(readFileSync(join(PRUEBAS, `${parche}.gz`))));
+    writeFileSync(temporal, gunzipSync(readFileSync(join(material, `${parche}.gz`))));
     const r = ejecutarEn(raiz, "git", ["apply", temporal]);
     rmSync(temporal);
     if (r.codigo !== 0) throw new Error(`No se ha podido aplicar ${parche}: ${r.salida}`);

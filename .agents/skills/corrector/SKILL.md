@@ -38,4 +38,4 @@ node .agents/skills/corrector/scripts/corregir.mjs <ejercicio> [fichero]
 
 ## Calibrar (para quien mantiene el curso)
 
-`node .agents/skills/corrector/scripts/calibrar.mjs [vueltas] [ejercicio...]` corrige varias veces las entregas buenas y malas de `pruebas/ejercicio-N/` y las compara con su `esperado.json`. Tiene que coincidir en todas las vueltas. En `pruebas/comun/` están, comprimidos, los proyectos de referencia con los que se montan las entregas: así no los ven ni los tests ni el compilador ni las búsquedas del agente.
+`CORRECTOR_PRUEBAS=<carpeta> node .agents/skills/corrector/scripts/calibrar.mjs [vueltas] [ejercicio...]` corrige varias veces las entregas buenas y malas de `<carpeta>/ejercicio-N/` y las compara con su `esperado.json`. Tiene que coincidir en todas las vueltas. Ese material, con los proyectos de referencia y los parches con los que se montan las entregas, no va en el repo del alumno: lo tiene quien mantiene el curso.
