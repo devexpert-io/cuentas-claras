@@ -37,7 +37,9 @@ async function main() {
     console.error("Uso: corregir.mjs <ejercicio> [fichero]");
     process.exit(2);
   }
-  if (fichero && !existsSync(fichero)) {
+  // Algunos ejercicios aceptan nombres en lugar de rutas (la skill del 8, las features del final).
+  // Solo se comprueba que exista lo que parece una ruta.
+  if (fichero && /[\\/]|\.(md|json)$/i.test(fichero) && !existsSync(fichero)) {
     console.error(`No encuentro ${fichero}.`);
     process.exit(2);
   }
