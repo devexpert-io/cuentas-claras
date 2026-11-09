@@ -10,7 +10,7 @@ import { esProyectoDelCurso } from "./6.mjs";
 import { comprobarValidada, revisarValidacion } from "./7.mjs";
 
 const DEL_CURSO = ["ver-saldos", "liquidar"];
-const TESTS_OCULTOS = join(PRUEBAS, "ejercicio-final", "saldos-liquidar.oculto.ts");
+const TESTS_OCULTOS = join(PRUEBAS, "ejercicio-final", "saldos-liquidar.oculto.ts.gz");
 
 export async function corregirEjercicio({ raiz, fichero, modelo }) {
   const lista = leerJson(join(raiz, "feature_list.json"));
