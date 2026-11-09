@@ -1,6 +1,6 @@
 # Ejercicio final · Dos features con el bucle completo, sin ayuda
 
-Vas a hacer `ver-saldos` y `liquidar` de principio a fin con el arnés que has montado: spec, implementación y validación en otra sesión. Si el corrector acepta las dos, consigues el certificado del curso.
+Vas a hacer `ver-saldos` y `liquidar` de principio a fin con el arnés que has montado: spec, implementación y validación en otra sesión. Cuando el corrector acepte las dos, entrega la práctica final en la academia para conseguir el certificado del curso.
 
 ## Antes de empezar
 
@@ -41,3 +41,18 @@ node .agents/skills/corrector/scripts/corregir.mjs final <id1>,<id2>
 ```
 
 Sin tests del curso, el corrector mira el estado, las specs, las validaciones y `./init.sh`.
+
+## La práctica final
+
+Cuando el corrector acepte las dos features, entrega la práctica final en la academia. Hazla sobre tu propio proyecto si tienes uno, con las dos features que le has pasado al corrector. Si no, sobre `cuentas-claras`, con `ver-saldos` y `liquidar`.
+
+Pega en la entrega:
+
+1. Qué proyecto es y, si puedes compartirlo, el enlace al repo.
+2. La salida completa del corrector del ejercicio final: `node .agents/skills/corrector/scripts/corregir.mjs final <id1>,<id2>` en tu proyecto o `node .agents/skills/corrector/scripts/corregir.mjs final` en `cuentas-claras`.
+3. La salida completa del corrector del ejercicio 8 con la skill que creaste: `node .agents/skills/corrector/scripts/corregir.mjs 8 <nombre-de-tu-skill>`.
+4. Si no puedes compartir el repo, tu `AGENTS.md` y, de la spec de una de las dos features, el objetivo y los escenarios de aceptación (`Goal` y `Acceptance Scenarios`). Si no cabe todo, deja menos escenarios y di cuántos has quitado.
+
+La entrega admite hasta 12.000 caracteres de texto.
+
+La revisa el equipo de DevExpert. Si falta algo, te pide cambios. Cuando la aprueba, se emite el certificado.
