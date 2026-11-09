@@ -162,8 +162,8 @@ export async function corregirEjercicio({ raiz, fichero, modelo }) {
 }
 
 /**
- * Casos de calibración: cada carpeta de pruebas/ejercicio-8/casos.tar.gz tiene la skill de un alumno
- * (<caso>/<nombre>/SKILL.md). Van comprimidos para que ningún agente los cargue como skills del repo.
+ * Casos de calibración: cada carpeta de ejercicio-8/casos.tar.gz, en el material de CORRECTOR_PRUEBAS, tiene la
+ * skill de un alumno (<caso>/<nombre>/SKILL.md). Van comprimidos para que ningún agente los cargue como skills.
  * Se extrae el caso y se copia a .agents/skills/ de un repo temporal.
  */
 export function prepararCaso({ carpeta, caso }) {

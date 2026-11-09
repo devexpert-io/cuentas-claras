@@ -1,13 +1,22 @@
 #!/usr/bin/env node
-// Calibra el corrector: corrige varias veces cada entrega de pruebas/ejercicio-N/ y compara con su esperado.json.
-// Uso: node .agents/skills/corrector/scripts/calibrar.mjs [vueltas] [ejercicio...]   (usa la clave de DEVEXPERT_API_KEY)
+// Calibra el corrector: corrige varias veces cada entrega de <material>/ejercicio-N/ y compara con su esperado.json.
+// Uso: CORRECTOR_PRUEBAS=<material> node .agents/skills/corrector/scripts/calibrar.mjs [vueltas] [ejercicio...]   (usa la clave de DEVEXPERT_API_KEY)
 //
+// <material> es la carpeta con los casos, los proyectos de referencia y los parches. No va en el repo del alumno.
 // Cada clave de esperado.json es un caso. Se comparan todos los campos que pone el esperado (veredicto,
 // marcados, cobertura...). Si el módulo del ejercicio exporta prepararCaso, prepara él el proyecto del caso.
-// Si no, el caso es un fichero de pruebas/ejercicio-N/ y el proyecto es pruebas/ejercicio-N/proyecto.
+// Si no, el caso es un fichero de <material>/ejercicio-N/ y el proyecto es <material>/ejercicio-N/proyecto.
 import { join } from "node:path";
 import { corregir, EJERCICIOS } from "./corregir.mjs";
-import { leerJson, PRUEBAS } from "./proyecto.mjs";
+import { leerJson, materialDeCalibracion } from "./proyecto.mjs";
+
+let material;
+try {
+  material = materialDeCalibracion();
+} catch (e) {
+  console.error(e.message);
+  process.exit(2);
+}
 
 const [vueltasTexto, ...pedidos] = process.argv.slice(2);
 const vueltas = Number(vueltasTexto ?? 3);
@@ -15,7 +24,7 @@ const ejercicios = pedidos.length ? pedidos : Object.keys(EJERCICIOS);
 
 let fallos = 0;
 for (const ejercicio of ejercicios) {
-  const carpeta = join(PRUEBAS, `ejercicio-${ejercicio}`);
+  const carpeta = join(material, `ejercicio-${ejercicio}`);
   const esperado = leerJson(join(carpeta, "esperado.json"));
   if (!esperado) {
     console.log(`· ejercicio ${ejercicio}: sin pruebas`);
