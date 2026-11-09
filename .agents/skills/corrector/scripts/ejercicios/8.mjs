@@ -6,7 +6,7 @@
 import { cpSync, existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, relative, resolve } from "node:path";
-import { lineasDeFijas, REPO, SKILL } from "../proyecto.mjs";
+import { ejecutarEn, lineasDeFijas, REPO, SKILL } from "../proyecto.mjs";
 import { conBarras } from "../plataforma.mjs";
 
 const CARPETAS = [".agents/skills", ".claude/skills", ".opencode/skills"];
@@ -162,11 +162,19 @@ export async function corregirEjercicio({ raiz, fichero, modelo }) {
 }
 
 /**
- * Casos de calibración: cada carpeta de pruebas/ejercicio-8/ tiene la skill de un alumno (<nombre>/SKILL.md).
- * Se copia a .agents/skills/ de un repo temporal. Fuera de una carpeta de skills, el agente no las carga.
+ * Casos de calibración: cada carpeta de pruebas/ejercicio-8/casos.tar.gz tiene la skill de un alumno
+ * (<caso>/<nombre>/SKILL.md). Van comprimidos para que ningún agente los cargue como skills del repo.
+ * Se extrae el caso y se copia a .agents/skills/ de un repo temporal.
  */
 export function prepararCaso({ carpeta, caso }) {
   const raiz = mkdtempSync(join(tmpdir(), "corrector-8-"));
-  cpSync(join(carpeta, caso), join(raiz, ".agents", "skills"), { recursive: true });
+  const casos = mkdtempSync(join(tmpdir(), "corrector-8-casos-"));
+  try {
+    const r = ejecutarEn(casos, "tar", ["-xzf", join(carpeta, "casos.tar.gz")]);
+    if (r.codigo !== 0 || !existsSync(join(casos, caso))) throw new Error(`No se ha podido extraer el caso ${caso} de casos.tar.gz: ${r.salida}`);
+    cpSync(join(casos, caso), join(raiz, ".agents", "skills"), { recursive: true });
+  } finally {
+    rmSync(casos, { recursive: true, force: true });
+  }
   return { raiz, limpiar: () => rmSync(raiz, { recursive: true, force: true }) };
 }
