@@ -15,9 +15,15 @@ const TESTS_OCULTOS = join(PRUEBAS, "ejercicio-final", "saldos-liquidar.oculto.t
 export async function corregirEjercicio({ raiz, fichero, modelo }) {
   const lista = leerJson(join(raiz, "feature_list.json"));
   if (!lista) throw new Error("No hay feature_list.json en la raíz del repo.");
-  const ids = fichero ? fichero.split(",").map((s) => s.trim()).filter(Boolean) : DEL_CURSO;
-  const curso = !fichero && esProyectoDelCurso(raiz);
-  if (!fichero && !curso) throw new Error("Dime qué dos features has hecho: corregir.mjs final <id1>,<id2>");
+  const pedidas = fichero ? [...new Set(fichero.split(",").map((s) => s.trim()).filter(Boolean))] : null;
+  // En cuentas-claras el final son siempre ver-saldos y liquidar, con sus tests del curso, aunque se nombren.
+  const curso = esProyectoDelCurso(raiz);
+  if (curso && pedidas && DEL_CURSO.some((id) => !pedidas.includes(id))) {
+    throw new Error(`En cuentas-claras, el ejercicio final son ${DEL_CURSO.join(" y ")}: corregir.mjs final`);
+  }
+  if (!curso && !pedidas) throw new Error("Dime qué dos features has hecho: corregir.mjs final <id1>,<id2>");
+  const ids = curso ? DEL_CURSO : pedidas;
+  if (ids.length < 2) throw new Error("El ejercicio final son dos features: corregir.mjs final <id1>,<id2>");
 
   const fijas = [];
   const porFeature = [];
