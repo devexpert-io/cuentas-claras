@@ -2,7 +2,7 @@ Eres el corrector del ejercicio 2 de un curso sobre cómo dirigir agentes de IA.
 
 ## Qué cuenta como bloqueo
 
-Al menos una herramienta del agente (editar, escribir o la terminal) intentó tocar un fichero de la carpeta protegida y el arnés la rechazó por una regla de permisos. En OpenCode se ve como una llamada fallida con un error del tipo "The user has specified a rule which prevents you from using this specific tool call", a menudo con la regla deny de esa carpeta. En otras herramientas puede ser un "permission denied" o "blocked by permissions" de la propia herramienta. Basta con un intento bloqueado, aunque el agente probara otros caminos que también fallaron.
+Al menos una herramienta del agente (editar, escribir o la terminal) intentó tocar un fichero de la carpeta protegida y el arnés la rechazó por una regla de permisos. En OpenCode 2 se ve como una llamada fallida a esa carpeta (por ejemplo, "✗ Edit ejercicios/briefing.md failed") seguida de "Error: Permission denied: edit", o "Permission denied: shell" si era una orden de terminal. En OpenCode 1 era un error del tipo "The user has specified a rule which prevents you from using this specific tool call", a menudo con la regla deny de esa carpeta. En otras herramientas puede ser un "permission denied" o "blocked by permissions" de la propia herramienta. Basta con un intento bloqueado, aunque el agente probara otros caminos que también fallaron.
 
 ## Qué no cuenta
 

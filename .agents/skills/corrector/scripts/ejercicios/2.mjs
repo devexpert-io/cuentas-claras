@@ -13,6 +13,18 @@ const ETIQUETA = "inicio-ejercicio-5";
 
 /** Patrón de permisos de OpenCode o de Claude Code → RegExp. El asterisco vale por cualquier cosa. */
 const patron = (p) => new RegExp(`^${p.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*+/g, ".*")}$`);
+/** Patrón de las reglas de OpenCode 2: además, "?" vale por un carácter. */
+const patron2 = (p) => new RegExp(`^${String(p).replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*+/g, ".*").replace(/\?/g, ".")}$`);
+
+/** OpenCode 2: "permissions" es una lista de reglas { action, resource, effect } y gana la última que encaja. */
+function efecto2(reglas, accion, recurso) {
+  let efecto = null;
+  for (const r of reglas) {
+    if (!r || typeof r !== "object") continue;
+    if (patron2(r.action ?? "").test(accion) && patron2(r.resource ?? "").test(recurso)) efecto = r.effect;
+  }
+  return efecto;
+}
 
 const normalizarCarpeta = (c) => `${(c ?? "").replace(/[`'"]/g, "").trim().replace(/^\.\//, "").replace(/\/+$/, "")}/`;
 
@@ -44,8 +56,20 @@ function comprobarConfiguracion(raiz, carpeta) {
   if (existsSync(opencode)) {
     const { datos, error } = leerJsonCon(opencode);
     if (error) return [{ id: "configuracion", ok: false, t: `opencode.json no es JSON válido: ${error}` }];
+    const reglas = datos.permissions;
+    if (Array.isArray(reglas) && reglas.length) {
+      alguna = true;
+      const regla = (accion, recurso) => `{ "action": "${accion}", "resource": "${recurso}", "effect": "deny" }`;
+      if (efecto2(reglas, "edit", "README.md") === "deny") fijas.push({ id: "configuracion", ok: false, t: "opencode.json deniega editar en todo el proyecto. La regla tiene que ser solo para la carpeta" });
+      else if (efecto2(reglas, "edit", fichero) === "deny") fijas.push({ id: "configuracion", ok: true, t: `opencode.json deniega editar ${carpeta}` });
+      else fijas.push({ id: "configuracion", ok: false, t: `opencode.json no deniega editar ${carpeta}. Añade al final de "permissions" la regla ${regla("edit", `${carpeta}*`)}` });
+      const orden = `echo hola >> ${fichero}`;
+      if (efecto2(reglas, "shell", orden) === "deny") fijas.push({ id: "configuracion", ok: true, t: `opencode.json deniega las órdenes de terminal que nombran ${carpeta}` });
+      else fijas.push({ id: "configuracion", ok: false, t: `opencode.json no cierra la terminal: con una orden como "${orden}" el agente podría escribir igual. Añade al final de "permissions" la regla ${regla("shell", `*${carpeta}*`)}` });
+    }
+    // El formato de OpenCode 1 ("permission", con "edit" y "bash"), que OpenCode 2 todavía acepta.
     const p = datos.permission;
-    if (p) {
+    if (!alguna && p) {
       alguna = true;
       const edit = typeof p.edit === "string" ? null : p.edit;
       if (p.edit === "deny") fijas.push({ id: "configuracion", ok: false, t: "opencode.json deniega editar en todo el proyecto. La regla tiene que ser solo para la carpeta" });
@@ -73,7 +97,7 @@ function comprobarConfiguracion(raiz, carpeta) {
       );
     }
   }
-  if (!alguna) fijas.push({ id: "configuracion", ok: false, t: 'No encuentro permisos en el repo: ni un bloque "permission" en opencode.json ni "permissions.deny" en .claude/settings.json' });
+  if (!alguna) fijas.push({ id: "configuracion", ok: false, t: 'No encuentro permisos en el repo: ni una lista "permissions" en opencode.json ni "permissions.deny" en .claude/settings.json' });
   return fijas;
 }
 
