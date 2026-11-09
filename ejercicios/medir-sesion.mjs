@@ -5,7 +5,8 @@
 //   node ejercicios/medir-sesion.mjs <n>        las n últimas
 //   node ejercicios/medir-sesion.mjs ses_...    una sesión concreta
 //
-// Lee las sesiones con `opencode session list` y `opencode export`, y suma los tokens de cada petición tuya:
+// Lee las sesiones con `opencode session list` y `opencode session export` (OpenCode 2), y suma los tokens de cada
+// petición tuya:
 // cuántas llamadas hizo el agente, el contexto con el que empezó, la entrada nueva, la cacheada y la salida.
 // El coste lo calculas tú.
 import { execFileSync } from "node:child_process";
@@ -15,7 +16,7 @@ import { join } from "node:path";
 
 const n = (x) => String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
-// La salida va a un fichero y no a una tubería: con una tubería, `opencode export` corta las sesiones largas.
+// La salida va a un fichero y no a una tubería, para que las sesiones largas no lleguen cortadas.
 function opencode(...args) {
   const carpeta = mkdtempSync(join(tmpdir(), "medir-sesion-"));
   const fichero = join(carpeta, "salida.json");
@@ -25,7 +26,7 @@ function opencode(...args) {
     return readFileSync(fichero, "utf8");
   } catch (e) {
     if (e.code === "ENOENT") throw new Error("No encuentro opencode. Instálalo o ábrelo desde esta terminal.");
-    throw new Error(`opencode ${args[0]} ha fallado.`);
+    throw new Error(`opencode ${args.slice(0, 2).join(" ")} ha fallado. Comprueba con opencode --version que tienes OpenCode 2.`);
   } finally {
     closeSync(fd);
     rmSync(carpeta, { recursive: true, force: true });
@@ -49,12 +50,12 @@ function peticiones(sesion) {
   const salida = [];
   let actual = null;
   for (const m of sesion.messages ?? []) {
-    if (m.info.role === "user") {
-      const texto = (m.parts ?? []).filter((p) => p.type === "text" && !p.synthetic).map((p) => p.text).join(" ").trim().replace(/^"(.*)"$/s, "$1");
+    if (m.type === "user") {
+      const texto = (m.text ?? "").trim().replace(/^"(.*)"$/s, "$1");
       actual = { texto, llamadas: 0, entrada: 0, cacheada: 0, salida: 0, primera: 0, ultima: 0 };
       salida.push(actual);
-    } else if (m.info.role === "assistant" && actual && m.info.tokens) {
-      const t = m.info.tokens;
+    } else if (m.type === "assistant" && actual && m.tokens) {
+      const t = m.tokens;
       actual.llamadas++;
       actual.entrada += t.input ?? 0;
       actual.cacheada += t.cache?.read ?? 0;
@@ -73,7 +74,7 @@ if (!ids.length) {
   process.exit(1);
 }
 for (const id of ids) {
-  const sesion = JSON.parse(opencode("export", id));
+  const sesion = JSON.parse(opencode("session", "export", id));
   const fecha = new Date(sesion.info?.time?.created ?? Date.now()).toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" });
   console.log(`Sesión ${id} · ${fecha} · ${sesion.info?.title ?? ""}`);
   peticiones(sesion).forEach((p, i) => {
