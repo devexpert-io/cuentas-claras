@@ -10,15 +10,17 @@ Vas a conectar a tu agente un MCP con la documentación de las librerías y a us
 
 ## Pasos
 
-1. Añade este bloque al `opencode.json` de la raíz del repo, al mismo nivel que `"model"` y `"provider"`:
+1. Añade este bloque al `opencode.json` de la raíz del repo, al mismo nivel que `"model"` y `"providers"`:
 
    ```json
    "mcp": {
-     "context7": { "type": "remote", "url": "https://mcp.context7.com/mcp" }
+     "servers": {
+       "context7": { "type": "remote", "url": "https://mcp.context7.com/mcp" }
+     }
    }
    ```
 
-2. Comprueba que conecta: `opencode mcp list` tiene que decir `context7 connected`.
+2. Comprueba que conecta: `opencode mcp list` tiene que decir `✓ context7  connected`. OpenCode tarda unos segundos en leer el cambio: si dice `No MCP servers configured`, espera un poco y repite.
 3. Elige una duda sobre una librería del proyecto. Mira cuáles son en `package.json`: Vitest para los tests, TypeScript y tsx. Por ejemplo, cómo comprobar en Vitest que una función lanza un error con un mensaje concreto, o para qué sirve `satisfies` en TypeScript.
 4. Pregúntasela al agente, pidiéndole que use la versión del proyecto y que cite la fuente:
 
@@ -26,13 +28,13 @@ Vas a conectar a tu agente un MCP con la documentación de las librerías y a us
    opencode run "¿Cómo compruebo en Vitest que una función lanza un error con un mensaje concreto? Mira la versión de Vitest en package.json, usa la documentación de esa versión y cita la URL de la fuente."
    ```
 
-   Mira en la salida que llama a las herramientas del MCP (`context7_resolve-library-id` y `context7_query-docs`). Si no las usa, pídeselo expresamente.
+   Mira en la salida que llama a las herramientas del MCP. OpenCode 2 las llama desde código, así que salen dentro de una línea `execute`, como `tools.context7["resolve-library-id"](...)` y `tools.context7["query-docs"](...)`. Si no las usa, pídeselo expresamente.
 5. Abre la URL que cita y comprueba que dice lo que te ha contado.
 6. Rellena `ejercicios/entregas/03-mcp.md`: la configuración, la pregunta, la respuesta y la URL de la fuente.
 7. Pasa el corrector: pídele a tu agente "Usa la skill corrector con el ejercicio 3" o ejecuta `node .agents/skills/corrector/scripts/corregir.mjs 3`.
 8. Corrige lo que marque hasta que dé `accept` y haz commit del `opencode.json` y de tu entrega.
 
-Recuerda lo que cuesta: las definiciones de las herramientas del MCP van en todas las llamadas de la sesión, aunque no lo uses. Si quieres quitarlo después, borra el bloque o ponle `"enabled": false`.
+Recuerda lo que cuesta: la lista de herramientas del MCP va en todas las llamadas de la sesión, aunque no lo uses. Con Context7, en OpenCode 2, son unos 750 tokens más por llamada. Si quieres quitarlo después, borra el bloque o ponle `"disabled": true` al servidor.
 
 ## Qué entregas
 
