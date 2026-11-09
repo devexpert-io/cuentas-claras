@@ -19,8 +19,14 @@ const leer = (ruta) => {
 
 const servidores = (bloque) =>
   Object.entries(bloque ?? {})
-    .filter(([, s]) => s && typeof s === "object" && s.enabled !== false && (s.url || s.command))
+    .filter(([, s]) => s && typeof s === "object" && s.enabled !== false && s.disabled !== true && (s.url || s.command))
     .map(([nombre]) => nombre);
+
+/** El bloque "mcp" de opencode.json: OpenCode 2 los pone en "servers"; OpenCode 1, directamente en "mcp". */
+const servidoresDeOpencode = (mcp) => {
+  const { servers, timeout, ...antiguos } = mcp ?? {};
+  return [...new Set([...servidores(servers), ...servidores(antiguos)])];
+};
 
 /** Los MCP declarados: opencode.json, .mcp.json (Claude Code) o config.toml de Codex. */
 function comprobarConfiguracion(raiz, { codexGlobal = true } = {}) {
@@ -28,7 +34,7 @@ function comprobarConfiguracion(raiz, { codexGlobal = true } = {}) {
   if (existsSync(opencode)) {
     const { datos, error } = leer(opencode);
     if (error) return { id: "configuracion", ok: false, t: `opencode.json no es JSON válido: ${error}` };
-    const s = servidores(datos.mcp);
+    const s = servidoresDeOpencode(datos.mcp);
     if (s.length) return { id: "configuracion", ok: true, t: `opencode.json declara el MCP ${s.join(", ")}` };
   }
   const claude = join(raiz, ".mcp.json");
