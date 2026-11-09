@@ -6,6 +6,7 @@ Vas a hacer la misma tarea en una sesión nueva y en otra cargada, y a apuntar l
 
 - Parte del estado del ejercicio: `git checkout inicio-ejercicio-5`.
 - Pon la clave del curso en tu terminal: `export DEVEXPERT_API_KEY=...`. La usan OpenCode y el corrector. En Windows, usa Git Bash (lo explica el README).
+- Usa OpenCode 2 (`opencode --version`). Si ya lo habías abierto antes de poner la clave, reinicia su servicio para que la vea: `opencode service restart`.
 - Las dos sesiones son preguntas: el agente no tiene que cambiar nada del repo.
 
 ## Pasos
