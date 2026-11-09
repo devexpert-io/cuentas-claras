@@ -9,7 +9,7 @@ cd "$(dirname "$0")"
 echo "Repositorio: $(pwd)"
 
 if ! command -v pnpm >/dev/null 2>&1; then
-  echo "Falta pnpm. Instálalo (por ejemplo, con 'corepack enable pnpm') y vuelve a ejecutar ./init.sh." >&2
+  echo "Falta pnpm. Instálalo (por ejemplo, con 'npm install -g pnpm@latest') y vuelve a ejecutar ./init.sh." >&2
   exit 1
 fi
 
