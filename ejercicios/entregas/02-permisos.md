@@ -9,7 +9,7 @@ cambia la de abajo.
 
 ## Configuración
 
-<!-- El bloque de permisos tal como está en tu opencode.json (o en .claude/settings.json), con sus llaves. -->
+<!-- El bloque "permissions" tal como está en tu opencode.json (o el de .claude/settings.json), entero. -->
 
 ```json
 ```
