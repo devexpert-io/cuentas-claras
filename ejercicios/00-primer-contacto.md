@@ -4,9 +4,11 @@ Vas a dejar tu entorno listo para el curso: abrir el agente en el repo de `cuent
 
 ## Antes de empezar
 
-- Necesitas una terminal, git, Node 22 o superior, pnpm y OpenCode. Si te falta pnpm, `corepack enable pnpm` lo instala.
+- Necesitas una terminal, git, Node 22 o superior, pnpm y OpenCode 2. Si te falta pnpm, instálalo con `npm install -g pnpm@latest`.
+- Instala OpenCode 2 con `npm install -g @opencode/cli` (tienes otras formas en [opencode.ai/v2/docs](https://opencode.ai/v2/docs)). Comprueba con `opencode --version` que es la 2.
 - Clona el repo y ponte en el punto de partida: `git checkout inicio-ejercicio-0`.
 - Pon la clave del curso en tu terminal, sin pegarla en ningún fichero: `export DEVEXPERT_API_KEY=...`. Solo vale para el modelo `chat`, tiene un tope de 3 $ y dura 30 días.
+- OpenCode 2 deja un servicio en segundo plano que se queda con las variables de la terminal en la que arrancó. Si lo habías abierto antes de poner la clave y te dice que falta, reinícialo con `opencode service restart` desde la terminal que la tiene.
 
 ## Pasos
 

@@ -14,7 +14,7 @@ export async function corregirEjercicio({ raiz, entorno = process.env }) {
   fijas.push(node >= 22 ? { ok: true, t: `Node ${process.versions.node}` } : { ok: false, t: `Tienes Node ${process.versions.node}. Hace falta la 22 o superior` });
 
   const pnpm = ejecutarEn(raiz, "pnpm", ["--version"], { env: entorno });
-  fijas.push(pnpm.codigo === 0 ? { ok: true, t: `pnpm ${pnpm.salida.trim().split("\n").at(-1)}` } : { ok: false, t: "No encuentro pnpm. Instálalo con 'corepack enable pnpm'" });
+  fijas.push(pnpm.codigo === 0 ? { ok: true, t: `pnpm ${pnpm.salida.trim().split("\n").at(-1)}` } : { ok: false, t: "No encuentro pnpm. Instálalo con 'npm install -g pnpm@latest'" });
 
   const clave = await comprobarClave(entorno.DEVEXPERT_API_KEY);
   fijas.push(
