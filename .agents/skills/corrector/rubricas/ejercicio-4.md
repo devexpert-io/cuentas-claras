@@ -8,7 +8,7 @@ Revisa cada feature de la lista por separado. Una sesión de un agente escribe s
 - "epica": junta varios comportamientos que se podrían entregar y verificar por separado, o un área entera del producto. Señales: un título con "y", comas o barras que une dominios distintos ("Gastos, saldos y liquidación", "Auth y pagos"), o una verificación que necesita varias órdenes, pantallas o integraciones independientes.
 - "demasiado_pequena": una tarea técnica sin comportamiento propio que verificar ("crear la carpeta src", "añadir un tipo"). Es una sugerencia, no bloquea.
 
-No marques "epica" una feature solo porque tenga casos de error, varias reglas que comprobar o un nombre largo, si todo es el mismo comportamiento. En la duda, "cabe".
+No marques "epica" una feature solo porque tenga casos de error, varias reglas que comprobar o un nombre largo, si todo es el mismo comportamiento. Tampoco si ofrece dos formas de dar la misma entrada a una sola orden: "repartir un gasto por partes o por porcentajes" es un único reparto proporcional, escrito de dos maneras. En la duda, "cabe".
 
 ## 2. Las reglas del briefing están en el modelo de dominio
 
