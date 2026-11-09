@@ -73,7 +73,7 @@ export async function corregirEjercicio({ raiz, fichero, modelo }) {
   l.push(
     "",
     veredicto === "accept"
-      ? "Veredicto: accept. Has hecho las dos features con el bucle completo. Enhorabuena: con esto consigues el certificado."
+      ? "Veredicto: accept. Has hecho las dos features con el bucle completo. Con esto ya puedes entregar la práctica final en la academia para conseguir el certificado."
       : "Veredicto: revise. Corrige lo marcado y vuelve a pasar el corrector.",
   );
   if (coste) l.push(`(revisión: ${coste.toFixed(4)} $)`);
