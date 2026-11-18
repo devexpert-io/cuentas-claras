@@ -2,7 +2,9 @@
 
 Una CLI para repartir los gastos de un grupo: una casa compartida, un viaje o una cena con amigos. Quién ha pagado qué, cuánto le toca a cada uno y quién le debe a quién.
 
-Es el proyecto de referencia del curso de entrada de DevExpert. Empieza casi vacío. En el ejercicio 4 lo preparas para trabajar con agentes y a partir del 5 le vas añadiendo features.
+Es el proyecto de [Dirige Agentes](https://devexpert.io/cursos/dirige-agentes), el curso en vídeo de DevExpert para empezar a trabajar con agentes de IA. Empieza casi vacío. En el ejercicio 4 lo preparas para trabajar con agentes y a partir del 5 le vas añadiendo features.
+
+Los enunciados, los vídeos y la práctica final del certificado están en el curso. Si has llegado aquí sin él, tienes toda la información en [devexpert.io/cursos/dirige-agentes](https://devexpert.io/cursos/dirige-agentes).
 
 ## Requisitos
 
